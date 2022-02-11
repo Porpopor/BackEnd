@@ -1,5 +1,6 @@
 package projectA.projectA.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
@@ -25,6 +26,7 @@ public class User{
   @Column(name = "last_name")
   private String lastName;
 
+  @JsonIgnore
   @Column(name = "password",length = 50)
   private String passWord;
 }
