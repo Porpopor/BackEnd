@@ -1,0 +1,8 @@
+Spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/findjob
+    username: postgres
+    password: Por0610720339
