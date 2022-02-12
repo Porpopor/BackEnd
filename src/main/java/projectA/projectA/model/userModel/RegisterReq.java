@@ -1,4 +1,4 @@
-package projectA.projectA.model;
+package projectA.projectA.model.userModel;
 
 import lombok.Data;
 

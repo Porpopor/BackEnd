@@ -11,9 +11,9 @@ public class UserException extends BaseException {
 
   }
 
-  public static UserException notFound() {
+  public static UserException notFoundId() {
 
-    return new UserException("not.found");
+    return new UserException("id.not.found");
 
   }
 
@@ -22,6 +22,7 @@ public class UserException extends BaseException {
     return new UserException("register.email.duplicated");
 
   }
+
   public static UserException createPhoneDuplicated() {
 
     return new UserException("register.phone.duplicated");
@@ -46,7 +47,7 @@ public class UserException extends BaseException {
 
   }
 
-  public static UserException createLastNameNull(){
+  public static UserException createLastNameNull() {
 
     return new UserException("request.lastname.null");
 
@@ -63,18 +64,31 @@ public class UserException extends BaseException {
     return new UserException("access.denied");
 
   }
-  public static UserException passwordIncorrect () {
+
+  public static UserException passwordIncorrect() {
 
     return new UserException("password.incorrect");
 
   }
-  public static UserException expires () {
+
+  public static UserException expires() {
 
     return new UserException("token.expires");
 
   }
-  public static UserException allFormNull(){
+
+  public static UserException allFormNull() {
+
     return new UserException("allForm.null");
   }
 
+  public static UserException loginFailEmailNotFound(){
+
+    return new UserException("Login.fail");
+  }
+
+  public static UserException loginFailPasswordIncorrect(){
+
+    return new UserException("Login.fail");
+  }
 }

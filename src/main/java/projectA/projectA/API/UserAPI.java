@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import projectA.projectA.business.UserBusiness;
 import projectA.projectA.entity.User;
 import projectA.projectA.exception.BaseException;
-import projectA.projectA.model.RegisterReq;
+import projectA.projectA.exception.UserException;
+import projectA.projectA.model.userModel.*;
 import projectA.projectA.repository.UserRepository;
 
 @RestController
@@ -22,9 +23,22 @@ public class UserAPI {
     this.userBusiness = userBusiness;
   }
 
-  @PostMapping("/register")
-  public ResponseEntity<User> register(@RequestBody RegisterReq user)throws BaseException {
-    User response = userBusiness.register(user);
+  @PostMapping("/login")
+  public ResponseEntity<String >login(@RequestBody LoginReq request) throws UserException {
+    String response = userBusiness.Login(request);
     return ResponseEntity.ok(response);
+  }
+
+  @PostMapping("/register")
+  public ResponseEntity<RegisterResponse> register(@RequestBody RegisterReq request)throws BaseException {
+    RegisterResponse response = userBusiness.register(request);
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping("/editUser")
+  public ResponseEntity<UserEditResponse>editUser(@RequestBody UserEditReq request) throws UserException {
+    UserEditResponse response = userBusiness.editUser(request);
+    return ResponseEntity.ok(response);
+
   }
 }
