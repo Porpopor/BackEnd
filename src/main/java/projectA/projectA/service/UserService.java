@@ -7,6 +7,7 @@ import projectA.projectA.exception.BaseException;
 import projectA.projectA.exception.UserException;
 import projectA.projectA.repository.UserRepository;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -26,6 +27,11 @@ public class UserService {
     return userRepository.findByEmail(email);
 
   }
+  public Optional<User> findById(int id){
+
+    return userRepository.findById(id);
+
+  }
 
 
 
@@ -38,6 +44,12 @@ public class UserService {
     Optional<User> edit = userRepository.findById(id);
     if (edit.isEmpty()){
       throw UserException.notFoundId();
+    }
+    if (Objects.isNull(firstName)|| firstName.equals("")){
+      throw UserException.createFirstNameNull();
+    }
+    if (Objects.isNull(lastName)|| lastName.equals("")){
+      throw UserException.createLastNameNull();
     }
     User user = edit.get();
     user.setFirstName(firstName);
@@ -53,9 +65,6 @@ public class UserService {
   public User create(String email, String firstname, String lastname, String password) throws BaseException {
     if (Objects.isNull(email)) {
       throw UserException.createEmailNull();
-    }
-    if (firstname.equals("")&& lastname.equals("")&& password.equals("")){
-      throw UserException.allFormNull();
     }
     if (Objects.isNull(firstname)|| firstname.equals("")){
       throw UserException.createFirstNameNull();
@@ -75,6 +84,7 @@ public class UserService {
     entity.setFirstName(firstname);
     entity.setLastName(lastname);
     entity.setPassWord(passwordEncoder.encode(password));
+    entity.setDate(new Date());
 
     return userRepository.save(entity);
   }

@@ -1,12 +1,10 @@
 package projectA.projectA.API;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import projectA.projectA.business.UserBusiness;
 import projectA.projectA.entity.User;
+import projectA.projectA.entity.UserProfile;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.exception.UserException;
 import projectA.projectA.model.userModel.*;
@@ -36,9 +34,15 @@ public class UserAPI {
   }
 
   @PostMapping("/editUser")
-  public ResponseEntity<UserEditResponse>editUser(@RequestBody UserEditReq request) throws UserException {
+  public ResponseEntity<UserEditResponse>editUser(@RequestBody UserEditReq request) throws BaseException {
     UserEditResponse response = userBusiness.editUser(request);
     return ResponseEntity.ok(response);
 
+  }
+
+  @PostMapping("/profile")
+  public ResponseEntity<UserProfile >profile(@RequestBody UserProfileReq request) throws BaseException {
+    UserProfile response = userBusiness.userProfile(request);
+    return ResponseEntity.ok(response);
   }
 }

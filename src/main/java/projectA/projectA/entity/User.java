@@ -1,21 +1,17 @@
 package projectA.projectA.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.GenericGenerator;
 import projectA.projectA.entity.base.AutoID;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Entity
 @Table(name = "user_name")
-public class User{
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "id", nullable = false,unique = true)
-  private int id;
+public class User extends AutoID{
 
   @Column(name = "email",nullable = false)
   private String email;
@@ -30,5 +26,11 @@ public class User{
   @Column(name = "password")
   private String passWord;
 
+  @JsonFormat(pattern = "dd-MM-yyyy")
+  @Column(name = "create_date", nullable = false)
+  private Date date;
+
+  @OneToOne(mappedBy = "user",orphanRemoval = true)
+  private UserProfile profileUser;
 
 }
