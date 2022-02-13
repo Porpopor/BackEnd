@@ -10,6 +10,8 @@ import projectA.projectA.exception.UserException;
 import projectA.projectA.model.userModel.*;
 import projectA.projectA.repository.UserRepository;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 public class UserAPI {
@@ -44,5 +46,11 @@ public class UserAPI {
   public ResponseEntity<UserProfile >profile(@RequestBody UserProfileReq request) throws BaseException {
     UserProfile response = userBusiness.userProfile(request);
     return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/test-user")
+  public List<User> getAllUser(){
+    List<User> all = (List<User>) this.userRepository.findAll();
+    return all;
   }
 }
