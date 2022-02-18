@@ -30,7 +30,12 @@ public class User extends AutoID{
   @Column(name = "create_date", nullable = false)
   private Date date;
 
+  @Column(name = "phone")
+  private String phone;
+
+  @Column(name = "name_Company")
+  private String nameCompany;
+
   @OneToOne(mappedBy = "user",orphanRemoval = true)
   private UserProfile profileUser;
-
 }

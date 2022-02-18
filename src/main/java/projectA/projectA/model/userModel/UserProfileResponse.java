@@ -3,12 +3,16 @@ package projectA.projectA.model.userModel;
 import lombok.Data;
 
 @Data
-public class UserEditReq {
+public class UserProfileResponse {
 
-  private int id;
+  private String email;
+
   private String firstName;
+
   private String lastName;
+
   private String phone;
+
   private String nameCompany;
 
 }

@@ -6,10 +6,13 @@ import projectA.projectA.entity.UserProfile;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.exception.UserException;
 import projectA.projectA.mapper.UserMapper;
+import projectA.projectA.model.APIResponse;
 import projectA.projectA.model.userModel.*;
+import projectA.projectA.service.TokenService;
 import projectA.projectA.service.UserProfileService;
 import projectA.projectA.service.UserService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,11 +21,13 @@ public class UserBusiness {
   private final UserService userService;
   private final UserMapper userMapper;
   private final UserProfileService userProfileService;
+  private final TokenService tokenService;
 
-  public UserBusiness(UserService userService, UserMapper userMapper, UserProfileService userProfileService) {
+  public UserBusiness(UserService userService, UserMapper userMapper, UserProfileService userProfileService, TokenService tokenService) {
     this.userService = userService;
     this.userMapper = userMapper;
     this.userProfileService = userProfileService;
+    this.tokenService = tokenService;
   }
 
 
@@ -36,9 +41,9 @@ public class UserBusiness {
     if (!userService.matchPassword(request.getPassWord(), user.getPassWord())) {
       throw UserException.loginFailPasswordIncorrect();
     }
-    String token = "JWT TO DO";
-
-    return token;
+    String tokenize = tokenService.tokenize(user);
+    System.out.printf(tokenize);
+    return tokenize;
   }
 
   public RegisterResponse register(RegisterReq request) throws BaseException {
@@ -47,7 +52,7 @@ public class UserBusiness {
   }
 
   public UserEditResponse editUser(UserEditReq request) throws BaseException {
-    User user = userService.upDateFirstName(request.getId(),request.getFirstName(),request.getLastName());
+    User user = userService.upDateProfile(request.getId(),request.getFirstName(),request.getLastName(),request.getPhone(),request.getNameCompany());
     return userMapper.UserEditToRegisterResponse(user);
   }
 
@@ -60,6 +65,12 @@ public class UserBusiness {
 
     return userProfileService.userProfileCreate(byId.get(),request.getPhone(),request.getNameCompany());
 
+  }
+
+  public List<UserProfileResponse> list(){
+    List<User> all = userService.findAll();
+    List<UserProfileResponse> userProfileResponse = userMapper.UserProfileToUserProfileResponse(all);
+    return userProfileResponse;
   }
 
 }
