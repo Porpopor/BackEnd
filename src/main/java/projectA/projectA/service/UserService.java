@@ -40,42 +40,31 @@ public class UserService {
     return passwordEncoder.matches(rawPassword, endcodedPassword);
   }
 
-  public User upDateProfile(int id, String firstName , String lastName, String phone, String nameCompany) throws UserException {
+  public void upDateProfile(User user, String firstName , String lastName, String phone, String nameCompany) throws UserException {
 
-    Optional<User> edit = userRepository.findById(id);
-    if (edit.isEmpty()){
-      throw UserException.notFoundId();
-    }
-    if (Objects.isNull(firstName)|| firstName.equals("")){
-      throw UserException.createFirstNameNull();
-    }
-    if (Objects.isNull(lastName)|| lastName.equals("")){
-      throw UserException.createLastNameNull();
-    }
-    User user = edit.get();
     user.setFirstName(firstName);
     user.setLastName(lastName);
     user.setPhone(phone);
     user.setNameCompany(nameCompany);
-    return userRepository.save(user);
+    userRepository.save(user);
 
   }
 
   public User create(String email, String firstname, String lastname, String password) throws BaseException {
     if (Objects.isNull(email)) {
-      throw UserException.createEmailNull();
+      throw UserException.EmailNull();
     }
     if (Objects.isNull(firstname)|| firstname.equals("")){
-      throw UserException.createFirstNameNull();
+      throw UserException.FirstNameNull();
     }
     if (Objects.isNull(lastname)|| lastname.equals("")){
-      throw UserException.createLastNameNull();
+      throw UserException.LastNameNull();
     }
     if (Objects.isNull(password)|| password.equals("")){
       throw UserException.createPasswordNull();
     }
     if(userRepository.existsByEmail(email)){
-      throw UserException.createEmailDuplicated();
+      throw UserException.EmailDuplicated();
     }
 
     User entity = new User();

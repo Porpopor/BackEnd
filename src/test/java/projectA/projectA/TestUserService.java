@@ -5,16 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import projectA.projectA.entity.User;
-import projectA.projectA.entity.UserProfile;
 import projectA.projectA.exception.BaseException;
-import projectA.projectA.service.UserProfileService;
 import projectA.projectA.service.UserService;
 
 @SpringBootTest
 class TestUserService {
 
-  @Autowired
-  private UserProfileService userProfileService;
 
 //	@Test
 //	void testCreate() throws BaseException {

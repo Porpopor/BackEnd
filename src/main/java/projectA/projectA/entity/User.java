@@ -7,6 +7,7 @@ import projectA.projectA.entity.base.AutoID;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -36,6 +37,9 @@ public class User extends AutoID{
   @Column(name = "name_Company")
   private String nameCompany;
 
-  @OneToOne(mappedBy = "user",orphanRemoval = true)
-  private UserProfile profileUser;
+//  @OneToOne(mappedBy = "user",orphanRemoval = true)
+//  private UserProfile profileUser;
+
+  @OneToMany(orphanRemoval = true, mappedBy = "user")
+  private List<CompanyWork> CompanyWork;
 }

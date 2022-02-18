@@ -15,5 +15,5 @@ public abstract class AutoID {
 //  @GenericGenerator(name = "uuid2", strategy = "uuid2")
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(nullable = false, updatable = false, length = 36, unique = true)
-  private int id;
+  private Integer id;
 }

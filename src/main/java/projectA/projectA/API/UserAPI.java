@@ -3,13 +3,11 @@ package projectA.projectA.API;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projectA.projectA.business.UserBusiness;
-import projectA.projectA.entity.UserProfile;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.exception.UserException;
 import projectA.projectA.mapper.UserMapper;
 import projectA.projectA.model.APIResponse;
 import projectA.projectA.model.userModel.*;
-import projectA.projectA.repository.UserProfileRepository;
 import projectA.projectA.repository.UserRepository;
 
 @RestController
@@ -26,11 +24,12 @@ public class UserAPI {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<APIResponse> login(@RequestBody LoginReq request) throws UserException {
-    String response = userBusiness.Login(request);
-    APIResponse apiResponse = new APIResponse();
-    apiResponse.setData(response);
-    return ResponseEntity.ok(apiResponse);
+  public ResponseEntity<Object> login(@RequestBody LoginReq request) throws UserException {
+//    String response = userBusiness.Login(request);
+    Object respones = userBusiness.Login(request);
+//    APIResponse apiResponse = new APIResponse();
+//    apiResponse.setData(response);
+    return ResponseEntity.ok(respones);
   }
 
   @PostMapping("/register")
@@ -42,20 +41,12 @@ public class UserAPI {
   }
 
   @PostMapping("/editUser")
-  public ResponseEntity<APIResponse> editUser(@RequestBody UserEditReq request) throws BaseException {
-    UserEditResponse response = userBusiness.editUser(request);
-    APIResponse apiResponse = new APIResponse();
-    apiResponse.setData(response);
-    return ResponseEntity.ok(apiResponse);
+  public ResponseEntity<Object> editUser(@RequestBody UserEditReq request) throws BaseException {
+    Object response = userBusiness.editProfile(request);
+//    APIResponse apiResponse = new APIResponse();
+//    apiResponse.setData(response);
+    return ResponseEntity.ok(response);
 
-  }
-
-  @PostMapping("/profile")
-  public ResponseEntity<APIResponse> profile(@RequestBody UserProfileReq request) throws BaseException {
-    UserProfile response = userBusiness.userProfile(request);
-    APIResponse apiResponse = new APIResponse();
-    apiResponse.setData(response);
-    return ResponseEntity.ok(apiResponse);
   }
 
   @GetMapping("/test-user")

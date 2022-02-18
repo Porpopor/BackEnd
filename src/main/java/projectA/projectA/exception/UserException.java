@@ -17,19 +17,13 @@ public class UserException extends BaseException {
 
   }
 
-  public static UserException createEmailDuplicated() {
+  public static UserException EmailDuplicated() {
 
     return new UserException("register.email.duplicated");
 
   }
 
-  public static UserException createPhoneDuplicated() {
-
-    return new UserException("register.phone.duplicated");
-
-  }
-
-  public static UserException createEmailNull() {
+  public static UserException EmailNull() {
 
     return new UserException("register.email.null");
 
@@ -37,19 +31,19 @@ public class UserException extends BaseException {
 
   public static UserException createPasswordNull() {
 
-    return new UserException("register.password.null");
+    return new UserException("password.null");
 
   }
 
-  public static UserException createFirstNameNull() {
+  public static UserException FirstNameNull() {
 
-    return new UserException("register.firstname.null");
+    return new UserException("firstname.null");
 
   }
 
-  public static UserException createLastNameNull() {
+  public static UserException LastNameNull() {
 
-    return new UserException("request.lastname.null");
+    return new UserException("lastname.null");
 
   }
 
