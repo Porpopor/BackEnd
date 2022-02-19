@@ -22,11 +22,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final String[] PUBLIC = {
     "/actuator/**",
+    "/company-work/listAll",
     "/user/register",
     "/user/login",
     "/user/activate",
     "/user/resend-activation-email",
-    "/socket/**"
+    "/socket/**",
+    "/company-work/listAllByProvince"
   };
 
   public SecurityConfig(TokenService tokenService) {

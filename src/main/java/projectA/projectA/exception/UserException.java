@@ -2,13 +2,7 @@ package projectA.projectA.exception;
 
 public class UserException extends BaseException {
   public UserException(String code) {
-    super("user." + code);
-  }
-
-  public static UserException notId() {
-
-    return new UserException("not.find.id");
-
+    super(code);
   }
 
   public static UserException notFoundId() {

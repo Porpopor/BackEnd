@@ -12,4 +12,6 @@ public interface CompanyWorkRepository extends JpaRepository<CompanyWork,Integer
   Optional<CompanyWork> findById(Integer id);
 
   List<CompanyWork>findByUser(User user);
+
+  List<CompanyWork>findByProvince(String comp);
 }

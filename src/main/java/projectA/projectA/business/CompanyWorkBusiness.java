@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import projectA.projectA.entity.CompanyWork;
 import projectA.projectA.entity.User;
 import projectA.projectA.exception.BaseException;
+import projectA.projectA.exception.CompanyWorkException;
 import projectA.projectA.exception.UserException;
 import projectA.projectA.mapper.CompanyWorkMapper;
 import projectA.projectA.model.Response;
@@ -34,9 +35,13 @@ public class CompanyWorkBusiness {
   public Object createCompanyWork(CompanyWorkReq request) throws BaseException {
     User user = tokenService.getUserByIdToken();
 
-    CompanyWork companyWork = companyWorkService.createCompanyWork(user,request.getDetail());
+    if (request.getProvince().isEmpty() || request.getProvince().equals("") || request.getProvince().contains(" ")) {
+      throw CompanyWorkException.provinceNull();
+    }
+
+    CompanyWork companyWork = companyWorkService.createCompanyWork(user, request.getDetail(), request.getProvince());
     CompanyWorkResponse work = companyWorkMapper.toCompanyWorkResponse(companyWork);
-    return new Response().ok("create","companyWork",work);
+    return new Response().ok("create", "companyWork", work);
   }
 
   public Object editCompanyWork(CompanyWorkReq request) throws BaseException {
@@ -44,11 +49,11 @@ public class CompanyWorkBusiness {
 
     Optional<CompanyWork> comp = companyWorkRepository.findById(request.getId());
 
-    if (comp.isEmpty()){
-      throw UserException.notFoundId();
+    if (comp.isEmpty()) {
+      throw CompanyWorkException.notFoundId();
     }
 
-    companyWorkService.editCompanyWork(user, request.getId(), request.getDetail());
+    companyWorkService.editCompanyWork(user, request.getId(), request.getDetail(), request.getProvince());
     return new Response().success("แก้ไขสำเร็จ");
   }
 
@@ -59,7 +64,25 @@ public class CompanyWorkBusiness {
 
     List<CompanyWorkResponse> comp = companyWorkMapper.toListCompanyWorkResponse(byUser);
 
-    return new Response().ok("Success","companyWork",comp);
+    return new Response().ok("Success", "companyWork", comp);
+  }
+
+  public Object listAll() {
+
+    List<CompanyWork> all = companyWorkService.findAll();
+
+    List<CompanyWorkResponse> comp = companyWorkMapper.toListCompanyWorkResponse(all);
+
+    return new Response().ok("Success", "companyWork", comp);
+  }
+
+  public Object listAllByProvince(CompanyWorkReq request) {
+
+    List<CompanyWork> province = companyWorkService.findByProvince(request);
+
+    List<CompanyWorkResponse> comp = companyWorkMapper.toListCompanyWorkResponse(province);
+
+    return new Response().ok("Success", "companyWork", comp);
   }
 
 }

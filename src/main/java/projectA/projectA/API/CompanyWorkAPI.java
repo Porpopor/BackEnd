@@ -31,9 +31,21 @@ public class CompanyWorkAPI {
     return ResponseEntity.ok(response);
   }
 
-  @PostMapping ("/list")
-  public ResponseEntity<Object>listCompUser() throws BaseException {
+  @PostMapping ("/listByUser")
+  public ResponseEntity<Object>listCompByUser() throws BaseException {
     Object response = companyWorkBusiness.listByUser();
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping ("/listAll")
+  public ResponseEntity<Object>listAll() throws BaseException {
+    Object response = companyWorkBusiness.listAll();
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping ("/listAllByProvince")
+  public ResponseEntity<Object>listAllByProvince(@RequestBody CompanyWorkReq request) throws BaseException {
+    Object response = companyWorkBusiness.listAllByProvince(request);
     return ResponseEntity.ok(response);
   }
 }
