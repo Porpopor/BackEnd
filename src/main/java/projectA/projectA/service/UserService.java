@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import projectA.projectA.entity.User;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.exception.UserException;
+import projectA.projectA.model.userModel.AdminReq;
 import projectA.projectA.repository.UserRepository;
 
 import java.util.Date;
@@ -21,6 +22,8 @@ public class UserService {
   public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
+
+    this.createAdmin();
   }
 
   public Optional<User> findByEmail(String email){
@@ -40,10 +43,11 @@ public class UserService {
     return passwordEncoder.matches(rawPassword, endcodedPassword);
   }
 
-  public void upDateProfile(User user, String firstName , String lastName, String phone, String nameCompany) throws UserException {
+  public void upDateProfile(User user, String firstName , String lastName,String newPassWord, String phone, String nameCompany) throws UserException {
 
     user.setFirstName(firstName);
     user.setLastName(lastName);
+    user.setPassWord(passwordEncoder.encode(newPassWord));
     user.setPhone(phone);
     user.setNameCompany(nameCompany);
     userRepository.save(user);
@@ -75,6 +79,25 @@ public class UserService {
     entity.setDate(new Date());
 
     return userRepository.save(entity);
+  }
+
+  public void createAdmin(){
+
+    AdminReq request = new AdminReq();
+
+    if (userRepository.existsByEmail(request.getEmail())){
+      return;
+    }
+    User entity = new User();
+
+    entity.setEmail(request.getEmail());
+    entity.setFirstName(request.getFirstName());
+    entity.setLastName(request.getLastName());
+    entity.setRole(request.getRole());
+    entity.setDate(new Date());
+    entity.setPassWord(passwordEncoder.encode(request.getPassWord()));
+
+    userRepository.save(entity);
   }
 
   public List<User> findAll(){

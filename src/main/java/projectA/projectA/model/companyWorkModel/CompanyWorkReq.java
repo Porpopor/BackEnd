@@ -8,6 +8,7 @@ import java.util.Date;
 public class CompanyWorkReq {
 
   private Integer id;
+  private String name;
   private String detail;
   private String province;
   private Date date;

@@ -38,7 +38,7 @@ public class UserBusiness {
       throw UserException.loginFailPasswordIncorrect();
     }
     String tokenize = tokenService.tokenize(user);
-    System.out.printf(tokenize);
+//    System.out.printf(tokenize);
     return new Response().ok("Login success","token",tokenize);
   }
 
@@ -55,8 +55,11 @@ public class UserBusiness {
     if (request.getLastName().isEmpty()||request.getLastName().equals("")||request.getLastName().contains(" ")){
       throw UserException.LastNameNull();
     }
+    if (!userService.matchPassword(request.getOldPassWord(),user.getPassWord())){
+      throw UserException.passwordIncorrect();
+    }
 
-    userService.upDateProfile(user,request.getFirstName(),request.getLastName(),request.getPhone(),request.getNameCompany());
+    userService.upDateProfile(user,request.getFirstName(),request.getLastName(),request.getNewPassWord(),request.getPhone(),request.getNameCompany());
     return new Response().success("แก้ไขสำเร็จ");
   }
 

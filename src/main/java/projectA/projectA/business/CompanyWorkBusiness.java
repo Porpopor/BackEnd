@@ -5,9 +5,9 @@ import projectA.projectA.entity.CompanyWork;
 import projectA.projectA.entity.User;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.exception.CompanyWorkException;
-import projectA.projectA.exception.UserException;
 import projectA.projectA.mapper.CompanyWorkMapper;
 import projectA.projectA.model.Response;
+import projectA.projectA.model.companyWorkModel.CompanyWorkDelete;
 import projectA.projectA.model.companyWorkModel.CompanyWorkReq;
 import projectA.projectA.model.companyWorkModel.CompanyWorkResponse;
 import projectA.projectA.repository.CompanyWorkRepository;
@@ -35,11 +35,15 @@ public class CompanyWorkBusiness {
   public Object createCompanyWork(CompanyWorkReq request) throws BaseException {
     User user = tokenService.getUserByIdToken();
 
+    if (request.getName().isEmpty() || request.getName().equals("") || request.getName().contains(" ")) {
+      throw CompanyWorkException.nameNull();
+    }
+
     if (request.getProvince().isEmpty() || request.getProvince().equals("") || request.getProvince().contains(" ")) {
       throw CompanyWorkException.provinceNull();
     }
 
-    CompanyWork companyWork = companyWorkService.createCompanyWork(user, request.getDetail(), request.getProvince());
+    CompanyWork companyWork = companyWorkService.createCompanyWork(user,request.getName(), request.getDetail(), request.getProvince());
     CompanyWorkResponse work = companyWorkMapper.toCompanyWorkResponse(companyWork);
     return new Response().ok("create", "companyWork", work);
   }
@@ -53,7 +57,15 @@ public class CompanyWorkBusiness {
       throw CompanyWorkException.notFoundId();
     }
 
-    companyWorkService.editCompanyWork(user, request.getId(), request.getDetail(), request.getProvince());
+    if (request.getName().isEmpty() || request.getName().equals("") || request.getName().contains(" ")) {
+      throw CompanyWorkException.nameNull();
+    }
+
+    if (request.getProvince().isEmpty() || request.getProvince().equals("") || request.getProvince().contains(" ")) {
+      throw CompanyWorkException.provinceNull();
+    }
+
+    companyWorkService.editCompanyWork(user,request.getId(),request.getName(), request.getDetail(), request.getProvince());
     return new Response().success("แก้ไขสำเร็จ");
   }
 
@@ -84,5 +96,19 @@ public class CompanyWorkBusiness {
 
     return new Response().ok("Success", "companyWork", comp);
   }
+  public Object delete(CompanyWorkDelete request) throws BaseException {
 
+//    User user = tokenService.getUserByIdToken();
+//
+//    List<CompanyWork> byId = companyWorkRepository.findByUser(user);
+////    System.out.println(comp);
+//
+//    if (!byId.equals(request.getId()))
+//    {
+//      throw CompanyWorkException.notFoundId();
+//    }
+
+    companyWorkService.deleteById(request.getId());
+     return new Response().success("Delete Success");
+  }
 }

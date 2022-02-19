@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projectA.projectA.business.CompanyWorkBusiness;
 import projectA.projectA.exception.BaseException;
+import projectA.projectA.model.companyWorkModel.CompanyWorkDelete;
 import projectA.projectA.model.companyWorkModel.CompanyWorkReq;
 import projectA.projectA.model.userModel.UserEditReq;
 
@@ -46,6 +47,12 @@ public class CompanyWorkAPI {
   @PostMapping ("/listAllByProvince")
   public ResponseEntity<Object>listAllByProvince(@RequestBody CompanyWorkReq request) throws BaseException {
     Object response = companyWorkBusiness.listAllByProvince(request);
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping ("/delete")
+  public ResponseEntity<Object>delete(@RequestBody CompanyWorkDelete request) throws BaseException {
+    Object response = companyWorkBusiness.delete(request);
     return ResponseEntity.ok(response);
   }
 }

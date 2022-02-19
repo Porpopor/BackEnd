@@ -37,9 +37,15 @@ public class User extends AutoID{
   @Column(name = "name_Company")
   private String nameCompany;
 
+  @Column(name = "role")
+  @Enumerated(EnumType.STRING)
+  private Role role = Role.USER;
+
 //  @OneToOne(mappedBy = "user",orphanRemoval = true)
 //  private UserProfile profileUser;
 
   @OneToMany(orphanRemoval = true, mappedBy = "user")
   private List<CompanyWork> CompanyWork;
+
+  public enum Role {ADMIN,USER}
 }

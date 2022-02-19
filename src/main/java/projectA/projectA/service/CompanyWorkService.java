@@ -19,42 +19,50 @@ public class CompanyWorkService {
     this.companyWorkRepository = companyWorkRepository;
   }
 
-  public CompanyWork createCompanyWork(User user, String detail, String province){
+  public CompanyWork createCompanyWork(User user, String name, String detail, String province) {
 
     CompanyWork entity = new CompanyWork();
 
     entity.setUser(user);
+    entity.setName(name);
     entity.setDetail(detail);
     entity.setProvince(province);
     companyWorkRepository.save(entity);
     return entity;
   }
 
-  public void editCompanyWork(User user, int id, String detail, String province){
+  public void editCompanyWork(User user, int id, String name, String detail, String province) {
 
     Optional<CompanyWork> comp = companyWorkRepository.findById(id);
 
     CompanyWork entity = comp.get();
 
     entity.setUser(user);
+    entity.setName(name);
     entity.setDetail(detail);
     entity.setProvince(province);
     entity.setUpdateDate(new Date());
     companyWorkRepository.save(entity);
   }
 
-  public List<CompanyWork>findByUser(User user){
+  public List<CompanyWork> findByUser(User user) {
     List<CompanyWork> companyWorks = companyWorkRepository.findByUser(user);
     return companyWorks;
   }
 
-  public List<CompanyWork>findAll(){
-    List<CompanyWork>all = companyWorkRepository.findAll();
+  public List<CompanyWork> findAll() {
+    List<CompanyWork> all = companyWorkRepository.findAll();
     return all;
   }
 
-  public List<CompanyWork>findByProvince(CompanyWorkReq request){
-    List<CompanyWork> byProvince = companyWorkRepository.findByProvince(request.getProvince());
+  public List<CompanyWork> findByProvince(CompanyWorkReq request) {
+    List<CompanyWork> byProvince = companyWorkRepository.findBySearchProvince(request.getProvince(), request.getName());
     return byProvince;
+  }
+
+  public void deleteById(Integer id) {
+
+    companyWorkRepository.deleteById(id);
+
   }
 }
