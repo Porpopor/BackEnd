@@ -34,9 +34,6 @@ public class CompanyWorkService {
 
     Optional<CompanyWork> comp = companyWorkRepository.findById(id);
 
-    if (comp.isEmpty()){
-      //TODO
-    }
     CompanyWork entity = comp.get();
 
     entity.setUser(user);
