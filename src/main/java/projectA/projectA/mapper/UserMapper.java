@@ -2,7 +2,6 @@ package projectA.projectA.mapper;
 
 import org.mapstruct.Mapper;
 import projectA.projectA.entity.User;
-import projectA.projectA.model.APIResponse;
 import projectA.projectA.model.userModel.RegisterResponse;
 import projectA.projectA.model.userModel.UserEditResponse;
 import projectA.projectA.model.userModel.UserProfileResponse;

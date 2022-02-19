@@ -17,12 +17,24 @@ public class CompanyWorkAPI {
     this.companyWorkBusiness = companyWorkBusiness;
   }
   @PostMapping("/create")
-  public ResponseEntity<Object> editUser(@RequestBody CompanyWorkReq request) throws BaseException {
+  public ResponseEntity<Object> createComp(@RequestBody CompanyWorkReq request) throws BaseException {
     Object response = companyWorkBusiness.createCompanyWork(request);
 //    APIResponse apiResponse = new APIResponse();
 //    apiResponse.setData(response);
     return ResponseEntity.ok(response);
 
+  }
+
+  @PostMapping("/edit")
+  public ResponseEntity<Object> editComp(@RequestBody CompanyWorkReq request) throws BaseException {
+    Object response = companyWorkBusiness.editCompanyWork(request);
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping ("/list")
+  public ResponseEntity<Object>listCompUser() throws BaseException {
+    Object response = companyWorkBusiness.listByUser();
+    return ResponseEntity.ok(response);
   }
 }
 
