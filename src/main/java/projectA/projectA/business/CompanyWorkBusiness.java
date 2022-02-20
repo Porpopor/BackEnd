@@ -43,7 +43,7 @@ public class CompanyWorkBusiness {
       throw CompanyWorkException.provinceNull();
     }
 
-    CompanyWork companyWork = companyWorkService.createCompanyWork(user,request.getName(), request.getDetail(), request.getProvince());
+    CompanyWork companyWork = companyWorkService.createCompanyWork(user, request.getName(), request.getDetail(), request.getProvince());
     CompanyWorkResponse work = companyWorkMapper.toCompanyWorkResponse(companyWork);
     return new Response().ok("create", "companyWork", work);
   }
@@ -65,7 +65,7 @@ public class CompanyWorkBusiness {
       throw CompanyWorkException.provinceNull();
     }
 
-    companyWorkService.editCompanyWork(user,request.getId(),request.getName(), request.getDetail(), request.getProvince());
+    companyWorkService.editCompanyWork(user, request.getId(), request.getName(), request.getDetail(), request.getProvince());
     return new Response().success("แก้ไขสำเร็จ");
   }
 
@@ -96,19 +96,16 @@ public class CompanyWorkBusiness {
 
     return new Response().ok("Success", "companyWork", comp);
   }
+
   public Object delete(CompanyWorkDelete request) throws BaseException {
 
-//    User user = tokenService.getUserByIdToken();
-//
-//    List<CompanyWork> byId = companyWorkRepository.findByUser(user);
-////    System.out.println(comp);
-//
-//    if (!byId.equals(request.getId()))
-//    {
-//      throw CompanyWorkException.notFoundId();
-//    }
+    User user = tokenService.getUserByIdToken();
+
+    if(!companyWorkService.existsByIdAndUser(request.getId(),user)){
+      throw CompanyWorkException.notFoundId();
+    }
 
     companyWorkService.deleteById(request.getId());
-     return new Response().success("Delete Success");
+    return new Response().success("Delete Success");
   }
 }

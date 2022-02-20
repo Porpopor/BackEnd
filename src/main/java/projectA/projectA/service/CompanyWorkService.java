@@ -3,6 +3,7 @@ package projectA.projectA.service;
 import org.springframework.stereotype.Service;
 import projectA.projectA.entity.CompanyWork;
 import projectA.projectA.entity.User;
+import projectA.projectA.exception.CompanyWorkException;
 import projectA.projectA.model.companyWorkModel.CompanyWorkReq;
 import projectA.projectA.repository.CompanyWorkRepository;
 
@@ -60,9 +61,22 @@ public class CompanyWorkService {
     return byProvince;
   }
 
+  public CompanyWork findById(Integer id) throws CompanyWorkException {
+    Optional<CompanyWork> byId = companyWorkRepository.findById(id);
+    if (byId.isEmpty()) {
+      throw CompanyWorkException.notFoundId();
+    }
+    return byId.get();
+  }
+
   public void deleteById(Integer id) {
 
     companyWorkRepository.deleteById(id);
 
   }
+
+  public boolean existsByIdAndUser(Integer id, User user) {
+    return companyWorkRepository.existsByIdAndUser(id, user);
+  }
+
 }
