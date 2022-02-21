@@ -63,9 +63,6 @@ public class CompanyWorkService {
 
   public CompanyWork findById(Integer id) throws CompanyWorkException {
     Optional<CompanyWork> byId = companyWorkRepository.findById(id);
-    if (byId.isEmpty()) {
-      throw CompanyWorkException.notFoundId();
-    }
     return byId.get();
   }
 

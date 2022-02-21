@@ -41,6 +41,9 @@ public class User extends AutoID{
   @Enumerated(EnumType.STRING)
   private Role role = Role.USER;
 
+  @Column(name = "picture",nullable = true)
+  private String picture;
+
 //  @OneToOne(mappedBy = "user",orphanRemoval = true)
 //  private UserProfile profileUser;
 

@@ -12,5 +12,6 @@ import java.util.List;
 public interface UserMapper {
   RegisterResponse toRegisterResponse(User user);
   UserEditResponse UserEditToRegisterResponse(User user);
+  UserProfileResponse UserProfileToResponse(User user);
   List<UserProfileResponse> UserProfileToUserProfileResponse(List<User> user);
 }

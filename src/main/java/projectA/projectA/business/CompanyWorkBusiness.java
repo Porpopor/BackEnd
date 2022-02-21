@@ -79,7 +79,7 @@ public class CompanyWorkBusiness {
     return new Response().ok("Success", "companyWork", comp);
   }
 
-  public Object listAll() {
+  public Object listAll() throws BaseException {
 
     List<CompanyWork> all = companyWorkService.findAll();
 
@@ -88,7 +88,7 @@ public class CompanyWorkBusiness {
     return new Response().ok("Success", "companyWork", comp);
   }
 
-  public Object listAllByProvince(CompanyWorkReq request) {
+  public Object listAllByProvince(CompanyWorkReq request) throws BaseException {
 
     List<CompanyWork> province = companyWorkService.findByProvince(request);
 
@@ -101,11 +101,23 @@ public class CompanyWorkBusiness {
 
     User user = tokenService.getUserByIdToken();
 
-    if(!companyWorkService.existsByIdAndUser(request.getId(),user)){
+    if (!companyWorkService.existsByIdAndUser(request.getId(), user)) {
       throw CompanyWorkException.notFoundId();
     }
 
     companyWorkService.deleteById(request.getId());
     return new Response().success("Delete Success");
+  }
+
+  public Object deleteByAdmin(CompanyWorkDelete request) throws BaseException {
+    User user = tokenService.getUserByIdToken();
+
+    Optional<CompanyWork> comp = companyWorkRepository.findById(request.getId());
+    if (comp.isEmpty()){
+      throw CompanyWorkException.notFoundId();
+    }
+    companyWorkService.deleteById(request.getId());
+    return new Response().success("Delete Success");
+
   }
 }

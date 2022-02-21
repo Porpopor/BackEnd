@@ -15,4 +15,6 @@ public class UserProfileResponse {
 
   private String nameCompany;
 
+  private String picture;
+
 }

@@ -59,6 +59,12 @@ public class UserException extends BaseException {
 
   }
 
+  public static UserException passwordOldIncorrect() {
+
+    return new UserException("password.old.incorrect");
+
+  }
+
   public static UserException expires() {
 
     return new UserException("token.expires");

@@ -43,15 +43,20 @@ public class UserService {
     return passwordEncoder.matches(rawPassword, endcodedPassword);
   }
 
-  public void upDateProfile(User user, String firstName , String lastName,String newPassWord, String phone, String nameCompany) throws UserException {
+  public void upDateProfile(User user, String firstName , String lastName, String phone, String nameCompany) throws UserException {
 
     user.setFirstName(firstName);
     user.setLastName(lastName);
-    user.setPassWord(passwordEncoder.encode(newPassWord));
     user.setPhone(phone);
     user.setNameCompany(nameCompany);
     userRepository.save(user);
 
+  }
+
+  public void ChangePassWord(User user,String passWord){
+
+    user.setPassWord(passwordEncoder.encode(passWord));
+    userRepository.save(user);
   }
 
   public User create(String email, String firstname, String lastname, String password) throws BaseException {
@@ -103,5 +108,12 @@ public class UserService {
   public List<User> findAll(){
     List<User> all = userRepository.findAll();
     return all;
+  }
+
+  public Optional<User> findById(Integer id){
+
+    Optional<User> byId = userRepository.findById(id);
+
+    return  byId;
   }
 }

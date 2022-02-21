@@ -24,9 +24,9 @@ public class UserAPI {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<Object> login(@RequestBody LoginReq request) throws UserException {
+  public ResponseEntity<Object> login(@RequestBody LoginReq request) throws BaseException {
 //    String response = userBusiness.Login(request);
-    Object respones = userBusiness.Login(request);
+    Object respones = userBusiness.LoginUser(request);
 //    APIResponse apiResponse = new APIResponse();
 //    apiResponse.setData(response);
     return ResponseEntity.ok(respones);
@@ -40,6 +40,12 @@ public class UserAPI {
     return ResponseEntity.ok(apiResponse);
   }
 
+  @GetMapping("/profile")
+  public ResponseEntity<Object>profile() throws BaseException {
+    Object response = userBusiness.findById();
+    return ResponseEntity.ok(response);
+  }
+
   @PostMapping("/editUser")
   public ResponseEntity<Object> editUser(@RequestBody UserEditReq request) throws BaseException {
     Object response = userBusiness.editProfile(request);
@@ -47,6 +53,12 @@ public class UserAPI {
 //    apiResponse.setData(response);
     return ResponseEntity.ok(response);
 
+  }
+
+  @PostMapping("/changePassword")
+  public ResponseEntity<Object>changePassword(@RequestBody UserChangePassWord request) throws BaseException {
+    Object response = userBusiness.ChangePassWord(request);
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping("/test-user")

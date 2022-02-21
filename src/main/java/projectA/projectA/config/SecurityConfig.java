@@ -18,50 +18,52 @@ import java.util.Collections;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private final TokenService tokenService;
+    private final TokenService tokenService;
 
-  private final String[] PUBLIC = {
-    "/actuator/**",
-    "/company-work/listAll",
-    "/user/register",
-    "/user/login",
-    "/user/activate",
-    "/user/resend-activation-email",
-    "/socket/**",
-    "/company-work/listAllByProvince"
-  };
+    private final String[] PUBLIC = {
+            "/actuator/**",
+            "/company-work/listAll",
+            "/user/register",
+            "/user/login",
+            "/user/activate",
+            "/user/resend-activation-email",
+            "/socket/**",
+            "/company-work/listAllByProvince",
+//            "/file/**",
+            "/uploads/**"
+    };
 
-  public SecurityConfig(TokenService tokenService) {
-    this.tokenService = tokenService;
-  }
+    public SecurityConfig(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http.cors(config -> {
-        CorsConfiguration cors = new CorsConfiguration();
-        cors.setAllowCredentials(true);
-        cors.setAllowedOriginPatterns(Collections.singletonList("http://*"));
-        cors.addAllowedHeader("*");
-        cors.addAllowedMethod("GET");
-        cors.addAllowedMethod("POST");
-        cors.addAllowedMethod("PUT");
-        cors.addAllowedMethod("DELETE");
-        cors.addAllowedMethod("OPTIONS");
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.cors(config -> {
+                    CorsConfiguration cors = new CorsConfiguration();
+                    cors.setAllowCredentials(true);
+                    cors.setAllowedOriginPatterns(Collections.singletonList("http://*"));
+                    cors.addAllowedHeader("*");
+                    cors.addAllowedMethod("GET");
+                    cors.addAllowedMethod("POST");
+                    cors.addAllowedMethod("PUT");
+                    cors.addAllowedMethod("DELETE");
+                    cors.addAllowedMethod("OPTIONS");
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", cors);
+                    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                    source.registerCorsConfiguration("/**", cors);
 
-        config.configurationSource(source);
-      }).csrf().disable()
-      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      .and().authorizeRequests().antMatchers(PUBLIC).anonymous()
-      .anyRequest().authenticated()
-      .and().apply(new TokenFilterConfiguerer(tokenService));
-  }
+                    config.configurationSource(source);
+                }).csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().authorizeRequests().antMatchers(PUBLIC).anonymous()
+                .anyRequest().authenticated()
+                .and().apply(new TokenFilterConfiguerer(tokenService));
+    }
 
 }

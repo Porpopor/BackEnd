@@ -27,19 +27,36 @@ public class UserBusiness {
   }
 
 
-  public Object Login(LoginReq request) throws UserException {
+  public Object LoginUser(LoginReq request) throws BaseException{
 
     Optional<User> byEmail = userService.findByEmail(request.getEmail());
     if (byEmail.isEmpty()) {
       throw UserException.loginFailEmailNotFound();
     }
     User user = byEmail.get();
+    UserEditResponse userEditResponse = userMapper.UserEditToRegisterResponse(user);
+
     if (!userService.matchPassword(request.getPassWord(), user.getPassWord())) {
       throw UserException.loginFailPasswordIncorrect();
     }
     String tokenize = tokenService.tokenize(user);
 //    System.out.printf(tokenize);
     return new Response().ok("Login success","token",tokenize);
+  }
+
+  public Object LoginAdmin(LoginReq request) throws BaseException {
+
+    Optional<User> byEmail = userService.findByEmail(request.getEmail());
+    User user = byEmail.get();
+
+
+    if (!user.getRole().equals(User.Role.ADMIN)){
+      throw UserException.loginFailEmailNotFound();
+    }
+
+    String tokenize = tokenService.tokenize(user);
+
+    return new Response().ok("LoginAdmin success","token",tokenize);
   }
 
   public RegisterResponse register(RegisterReq request) throws BaseException {
@@ -55,18 +72,43 @@ public class UserBusiness {
     if (request.getLastName().isEmpty()||request.getLastName().equals("")||request.getLastName().contains(" ")){
       throw UserException.LastNameNull();
     }
-    if (!userService.matchPassword(request.getOldPassWord(),user.getPassWord())){
+
+    userService.upDateProfile(user,request.getFirstName(),request.getLastName(),request.getPhone(),request.getNameCompany());
+    return new Response().success("แก้ไขสำเร็จ");
+  }
+
+  public Object ChangePassWord(UserChangePassWord request) throws BaseException {
+    User user = tokenService.getUserByIdToken();
+
+    if (!userService.matchPassword(request.getOldPassWord(), user.getPassWord())){
       throw UserException.passwordIncorrect();
     }
+    if (userService.matchPassword(request.getNewPassWord(), user.getPassWord())){
+      throw UserException.passwordOldIncorrect();
+    }
+    if (request.getNewPassWord().isEmpty()||request.getNewPassWord().equals("")||request.getNewPassWord().contains(" ")){
+      throw UserException.createPasswordNull();
+    }
+    userService.ChangePassWord(user,request.getNewPassWord());
 
-    userService.upDateProfile(user,request.getFirstName(),request.getLastName(),request.getNewPassWord(),request.getPhone(),request.getNameCompany());
-    return new Response().success("แก้ไขสำเร็จ");
+    return new Response().success("ChangePassword Success");
   }
 
   public List<UserProfileResponse> list(){
     List<User> all = userService.findAll();
     List<UserProfileResponse> userProfileResponse = userMapper.UserProfileToUserProfileResponse(all);
     return userProfileResponse;
+  }
+
+  public Object findById() throws BaseException {
+
+    User userByIdToken = tokenService.getUserByIdToken();
+
+    Optional<User> byId = userService.findById(userByIdToken.getId());
+    User user = byId.get();
+    UserProfileResponse userProfileResponse = userMapper.UserProfileToResponse(user);
+
+    return new Response().ok("Profile","data",userProfileResponse);
   }
 
 }
