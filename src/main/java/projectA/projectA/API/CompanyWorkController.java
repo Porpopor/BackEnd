@@ -6,15 +6,14 @@ import projectA.projectA.business.CompanyWorkBusiness;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.model.companyWorkModel.CompanyWorkDelete;
 import projectA.projectA.model.companyWorkModel.CompanyWorkReq;
-import projectA.projectA.model.userModel.UserEditReq;
 
 @RestController
 @RequestMapping("/company-work")
-public class CompanyWorkAPI {
+public class CompanyWorkController {
 
   private final CompanyWorkBusiness companyWorkBusiness;
 
-  public CompanyWorkAPI(CompanyWorkBusiness companyWorkBusiness) {
+  public CompanyWorkController(CompanyWorkBusiness companyWorkBusiness) {
     this.companyWorkBusiness = companyWorkBusiness;
   }
   @PostMapping("/create")

@@ -11,6 +11,12 @@ public class UserException extends BaseException {
 
   }
 
+  public static UserException notFoundEmailForgetPassword() {
+
+    return new UserException("Email.not.found");
+
+  }
+
   public static UserException EmailDuplicated() {
 
     return new UserException("register.email.duplicated");

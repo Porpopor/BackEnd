@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/socket/**",
             "/company-work/listAllByProvince",
 //            "/file/**",
-            "/uploads/**"
+            "/uploads/**",
+            "/sentEmail/**"
     };
 
     public SecurityConfig(TokenService tokenService) {

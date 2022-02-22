@@ -46,6 +46,19 @@ public class TokenService {
       .sign(algorithm());
   }
 
+  public String tokenizeForgetPassword(User user) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.MINUTE, 10);
+    Date expiresAt = calendar.getTime();
+
+    return JWT.create()
+            .withIssuer(issuer)
+            .withClaim("principal", user.getId().toString())
+            .withClaim("role", user.getRole().toString())
+            .withExpiresAt(expiresAt)
+            .sign(algorithm());
+  }
+
   public DecodedJWT verify(String token) {
     try {
       JWTVerifier verifier = JWT.require(algorithm())

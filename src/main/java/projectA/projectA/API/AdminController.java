@@ -8,18 +8,17 @@ import org.springframework.web.bind.annotation.RestController;
 import projectA.projectA.business.CompanyWorkBusiness;
 import projectA.projectA.business.UserBusiness;
 import projectA.projectA.exception.BaseException;
-import projectA.projectA.exception.UserException;
 import projectA.projectA.model.companyWorkModel.CompanyWorkDelete;
 import projectA.projectA.model.userModel.LoginReq;
 
 @RestController
 @RequestMapping("/admin")
-public class AdminAPI {
+public class AdminController {
 
   public final UserBusiness userBusiness;
   public final CompanyWorkBusiness companyWorkBusiness;
 
-  public AdminAPI(UserBusiness userBusiness, CompanyWorkBusiness companyWorkBusiness) {
+  public AdminController(UserBusiness userBusiness, CompanyWorkBusiness companyWorkBusiness) {
     this.userBusiness = userBusiness;
     this.companyWorkBusiness = companyWorkBusiness;
   }

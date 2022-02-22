@@ -7,9 +7,11 @@ import projectA.projectA.exception.UserException;
 import projectA.projectA.mapper.UserMapper;
 import projectA.projectA.model.Response;
 import projectA.projectA.model.userModel.*;
+import projectA.projectA.service.SentEmailService;
 import projectA.projectA.service.TokenService;
 import projectA.projectA.service.UserService;
 
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,11 +21,13 @@ public class UserBusiness {
   private final UserService userService;
   private final UserMapper userMapper;
   private final TokenService tokenService;
+  private final SentEmailService sentEmailService;
 
-  public UserBusiness(UserService userService, UserMapper userMapper, TokenService tokenService) {
+  public UserBusiness(UserService userService, UserMapper userMapper, TokenService tokenService, SentEmailService sentEmailService) {
     this.userService = userService;
     this.userMapper = userMapper;
     this.tokenService = tokenService;
+    this.sentEmailService = sentEmailService;
   }
 
 
@@ -34,7 +38,7 @@ public class UserBusiness {
       throw UserException.loginFailEmailNotFound();
     }
     User user = byEmail.get();
-    UserEditResponse userEditResponse = userMapper.UserEditToRegisterResponse(user);
+//    UserEditResponse userEditResponse = userMapper.UserEditToRegisterResponse(user);
 
     if (!userService.matchPassword(request.getPassWord(), user.getPassWord())) {
       throw UserException.loginFailPasswordIncorrect();
@@ -62,6 +66,18 @@ public class UserBusiness {
   public RegisterResponse register(RegisterReq request) throws BaseException {
     User user = userService.create(request.getEmail(), request.getFirstName(), request.getLastName(), request.getPassWord());
     return userMapper.toRegisterResponse(user);
+  }
+
+  public Object forgetPassword(ForgetPassword request) throws UserException, MessagingException {
+
+    Optional<User> byEmail = userService.findByEmail(request.getEmail());
+    if (byEmail.isEmpty()) {
+      throw UserException.notFoundEmailForgetPassword();
+    }
+    User user = byEmail.get();
+    sentEmailService.forgetPassword(request.getEmail(), request.getSubject(), request.getBody());
+    String forgetPassword = tokenService.tokenizeForgetPassword(user);
+    return new Response().ok("ForgetPassWord Success","token",forgetPassword);
   }
 
   public Object editProfile(UserEditReq request) throws BaseException {

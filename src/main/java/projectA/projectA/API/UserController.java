@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projectA.projectA.business.UserBusiness;
 import projectA.projectA.exception.BaseException;
-import projectA.projectA.exception.UserException;
 import projectA.projectA.mapper.UserMapper;
 import projectA.projectA.model.APIResponse;
 import projectA.projectA.model.userModel.*;
@@ -12,12 +11,12 @@ import projectA.projectA.repository.UserRepository;
 
 @RestController
 @RequestMapping("/user")
-public class UserAPI {
+public class UserController {
   public final UserRepository userRepository;
   public final UserBusiness userBusiness;
   public final UserMapper userMapper;
 
-  public UserAPI(UserRepository userRepository, UserBusiness userBusiness, UserMapper userMapper) {
+  public UserController(UserRepository userRepository, UserBusiness userBusiness, UserMapper userMapper) {
     this.userRepository = userRepository;
     this.userBusiness = userBusiness;
     this.userMapper = userMapper;

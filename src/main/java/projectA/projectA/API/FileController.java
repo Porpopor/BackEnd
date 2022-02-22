@@ -18,12 +18,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/file")
-public class File {
+public class FileController {
     public static String uploadDirectory = System.getProperty("user.dir");
     public final UserRepository userRepository;
     public final TokenService tokenService;
 
-    public File(UserRepository userRepository, TokenService tokenService) {
+    public FileController(UserRepository userRepository, TokenService tokenService) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
     }

@@ -52,6 +52,7 @@ public class TokenFilter extends GenericFilterBean {
     // user id
     String principal = decoded.getClaim("principal").asString();
     String role = decoded.getClaim("role").asString();
+    String status = decoded.getClaim("status").asString();
 
     List<GrantedAuthority> authorities = new ArrayList<>();
     authorities.add(new SimpleGrantedAuthority(role));
