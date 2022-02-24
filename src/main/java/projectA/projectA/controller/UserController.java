@@ -1,4 +1,4 @@
-package projectA.projectA.API;
+package projectA.projectA.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,6 +57,12 @@ public class UserController {
   @PostMapping("/changePassword")
   public ResponseEntity<Object>changePassword(@RequestBody UserChangePassWord request) throws BaseException {
     Object response = userBusiness.ChangePassWord(request);
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping("/reset-password")
+  public ResponseEntity<Object>resetPassword(@RequestBody UserResetPassWord request) throws BaseException {
+    Object response = userBusiness.resetPassWord(request);
     return ResponseEntity.ok(response);
   }
 

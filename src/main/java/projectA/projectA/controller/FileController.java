@@ -1,4 +1,4 @@
-package projectA.projectA.API;
+package projectA.projectA.controller;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

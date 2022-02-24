@@ -74,10 +74,8 @@ public class UserBusiness {
     if (byEmail.isEmpty()) {
       throw UserException.notFoundEmailForgetPassword();
     }
-    User user = byEmail.get();
-    sentEmailService.forgetPassword(request.getEmail(), request.getSubject(), request.getBody());
-    String forgetPassword = tokenService.tokenizeForgetPassword(user);
-    return new Response().ok("ForgetPassWord Success","token",forgetPassword);
+    sentEmailService.forgetPassword(request.getEmail(), request.getSubject());
+    return new Response().success("Sent Email Success");
   }
 
   public Object editProfile(UserEditReq request) throws BaseException {
@@ -110,6 +108,19 @@ public class UserBusiness {
     return new Response().success("ChangePassword Success");
   }
 
+  public Object resetPassWord(UserResetPassWord request) throws BaseException {
+    User user = tokenService.getUserByIdToken();
+    if (request.getNewPassWord().isEmpty()||request.getNewPassWord().equals("")||request.getNewPassWord().contains(" ")){
+      throw UserException.createPasswordNull();
+    }
+    if (!request.getNewPassWord().equals(request.getConfirmPassWord())){
+      throw UserException.passwordOldIncorrect();
+    }
+    userService.ChangePassWord(user,request.getNewPassWord());
+    return new Response().success("ResetPassword Success");
+
+  }
+
   public List<UserProfileResponse> list(){
     List<User> all = userService.findAll();
     List<UserProfileResponse> userProfileResponse = userMapper.UserProfileToUserProfileResponse(all);
@@ -125,6 +136,12 @@ public class UserBusiness {
     UserProfileResponse userProfileResponse = userMapper.UserProfileToResponse(user);
 
     return new Response().ok("Profile","data",userProfileResponse);
+  }
+
+  public Object findByIdCompany() throws BaseException {
+    User userByIdToken = tokenService.getUserByIdToken();
+    List<User> byIdCompany = userService.findByIdCompany(userByIdToken.getId());
+    return new Response().ok("view","data",byIdCompany);
   }
 
 }

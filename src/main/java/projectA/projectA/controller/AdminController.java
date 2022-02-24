@@ -1,4 +1,4 @@
-package projectA.projectA.API;
+package projectA.projectA.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -6,6 +6,8 @@ import projectA.projectA.entity.User;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.exception.UserException;
 import projectA.projectA.model.userModel.AdminReq;
+import projectA.projectA.model.userModel.ForgetPassword;
+import projectA.projectA.model.userModel.UserResetPassWord;
 import projectA.projectA.repository.UserRepository;
 
 import java.util.Date;
@@ -115,5 +117,10 @@ public class UserService {
     Optional<User> byId = userRepository.findById(id);
 
     return  byId;
+  }
+
+  public List<User> findByIdCompany(Integer user){
+    List<User> byIdCompany = userRepository.findByIdCompany(user);
+    return byIdCompany;
   }
 }

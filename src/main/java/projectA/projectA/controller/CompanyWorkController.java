@@ -1,9 +1,11 @@
-package projectA.projectA.API;
+package projectA.projectA.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projectA.projectA.business.CompanyWorkBusiness;
+import projectA.projectA.business.UserBusiness;
 import projectA.projectA.exception.BaseException;
+import projectA.projectA.exception.CompanyWorkException;
 import projectA.projectA.model.companyWorkModel.CompanyWorkDelete;
 import projectA.projectA.model.companyWorkModel.CompanyWorkReq;
 
@@ -12,9 +14,11 @@ import projectA.projectA.model.companyWorkModel.CompanyWorkReq;
 public class CompanyWorkController {
 
   private final CompanyWorkBusiness companyWorkBusiness;
+  private final UserBusiness userBusiness;
 
-  public CompanyWorkController(CompanyWorkBusiness companyWorkBusiness) {
+  public CompanyWorkController(CompanyWorkBusiness companyWorkBusiness, UserBusiness userBusiness) {
     this.companyWorkBusiness = companyWorkBusiness;
+    this.userBusiness = userBusiness;
   }
   @PostMapping("/create")
   public ResponseEntity<Object> createComp(@RequestBody CompanyWorkReq request) throws BaseException {
@@ -53,6 +57,18 @@ public class CompanyWorkController {
   public ResponseEntity<Object>delete(@RequestBody CompanyWorkDelete request) throws BaseException {
     Object response = companyWorkBusiness.delete(request);
     return ResponseEntity.ok(response);
+  }
+
+  @PostMapping("/view-byid")
+  public ResponseEntity<Object>findById(@RequestBody CompanyWorkReq req) throws CompanyWorkException {
+    Object response = companyWorkBusiness.findById(req);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/view")
+  public ResponseEntity<Object>findByIdCompany() throws BaseException {
+    Object byIdCompany = userBusiness.findByIdCompany();
+    return ResponseEntity.ok(byIdCompany);
   }
 }
 

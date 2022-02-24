@@ -27,7 +27,7 @@ public class User extends AutoID{
   @Column(name = "password")
   private String passWord;
 
-  @JsonFormat(pattern = "dd-MM-yyyy")
+
   @Column(name = "create_date", nullable = false)
   private Date date;
 

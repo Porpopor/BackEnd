@@ -26,8 +26,7 @@ public interface CompanyWorkRepository extends JpaRepository<CompanyWork, Intege
             """)
   List<CompanyWork> findBySearchProvince(@Param("province") String comp, @Param("name") String  name);
 
-
-  boolean existsByIdAndUser(Integer integer,User user);
+  boolean existsByIdAndUser(Integer integer, User user);
 
   //  select * from company_work where province like '%ข%'
 }

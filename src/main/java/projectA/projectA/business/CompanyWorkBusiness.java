@@ -69,6 +69,16 @@ public class CompanyWorkBusiness {
     return new Response().success("แก้ไขสำเร็จ");
   }
 
+  public Object findById(CompanyWorkReq id) throws CompanyWorkException {
+    Optional<CompanyWork> byId = companyWorkRepository.findById(id.getId());
+    if (byId.isEmpty()){
+      throw CompanyWorkException.notFoundId();
+    }
+    CompanyWork comp = byId.get();
+    CompanyWorkResponse companyWorkResponse = companyWorkMapper.toCompanyWorkResponse(comp);
+    return new Response().ok("CompById","data",companyWorkResponse);
+  }
+
   public Object listByUser() throws BaseException {
     User user = tokenService.getUserByIdToken();
 

@@ -1,4 +1,4 @@
-package projectA.projectA.API;
+package projectA.projectA.controller;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;

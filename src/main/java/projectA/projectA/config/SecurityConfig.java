@@ -31,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/company-work/listAllByProvince",
 //            "/file/**",
             "/uploads/**",
-            "/sentEmail/**"
+            "/sentEmail/**",
+            "/company-work/view-byid/**"
     };
 
     public SecurityConfig(TokenService tokenService) {

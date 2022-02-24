@@ -1,4 +1,4 @@
-package projectA.projectA.API;
+package projectA.projectA.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import projectA.projectA.business.UserBusiness;
 import projectA.projectA.exception.BaseException;
-import projectA.projectA.exception.UserException;
 import projectA.projectA.model.userModel.ForgetPassword;
 
 import javax.mail.MessagingException;
