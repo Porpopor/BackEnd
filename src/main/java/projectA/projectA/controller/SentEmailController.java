@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import projectA.projectA.business.UserBusiness;
+import projectA.projectA.entity.User;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.model.userModel.ForgetPassword;
+import projectA.projectA.model.userModel.LoginReq;
 
 import javax.mail.MessagingException;
 
@@ -24,7 +26,12 @@ public class SentEmailController {
     @PostMapping("/forget-password")
     public ResponseEntity<Object> forgetPassword(@RequestBody ForgetPassword request) throws BaseException, MessagingException {
         Object response = userBusiness.forgetPassword(request);
+        return ResponseEntity.ok(response);
+    }
 
+    @PostMapping("/verify-email")
+    public ResponseEntity<Object> verifyEmail(@RequestBody LoginReq request) throws BaseException, MessagingException {
+        Object response = userBusiness.verifyEmail(request);
         return ResponseEntity.ok(response);
     }
 }

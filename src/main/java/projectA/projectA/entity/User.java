@@ -50,5 +50,9 @@ public class User extends AutoID{
   @OneToMany(orphanRemoval = true, mappedBy = "user")
   private List<CompanyWork> CompanyWork;
 
+
+  @Column(name = "verify_email",columnDefinition = "integer default 0")
+  private Integer verifyEmail;
+
   public enum Role {ADMIN,USER}
 }

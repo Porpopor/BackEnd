@@ -45,16 +45,6 @@ public class UserService {
     return passwordEncoder.matches(rawPassword, endcodedPassword);
   }
 
-  public void upDateProfile(User user, String firstName , String lastName, String phone, String nameCompany) throws UserException {
-
-    user.setFirstName(firstName);
-    user.setLastName(lastName);
-    user.setPhone(phone);
-    user.setNameCompany(nameCompany);
-    userRepository.save(user);
-
-  }
-
   public void ChangePassWord(User user,String passWord){
 
     user.setPassWord(passwordEncoder.encode(passWord));
@@ -87,6 +77,15 @@ public class UserService {
 
     return userRepository.save(entity);
   }
+  public void upDateProfile(User user, String firstName , String lastName, String phone, String nameCompany) throws UserException {
+
+    user.setFirstName(firstName);
+    user.setLastName(lastName);
+    user.setPhone(phone);
+    user.setNameCompany(nameCompany);
+    userRepository.save(user);
+
+  }
 
   public void createAdmin(){
 
@@ -105,6 +104,12 @@ public class UserService {
     entity.setPassWord(passwordEncoder.encode(request.getPassWord()));
 
     userRepository.save(entity);
+  }
+
+  public void verifyEmail(User user){
+
+    user.setVerifyEmail(1);
+    userRepository.save(user);
   }
 
   public List<User> findAll(){

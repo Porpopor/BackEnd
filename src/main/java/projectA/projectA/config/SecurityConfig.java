@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/company-work/listAllByProvince",
 //            "/file/**",
             "/uploads/**",
-            "/sentEmail/**",
+            "/sentEmail/forget-password",
             "/company-work/view-byid/**"
     };
 

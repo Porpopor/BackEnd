@@ -48,7 +48,7 @@ public class TokenService {
 
   public String tokenizeForgetPassword(User user) {
     Calendar calendar = Calendar.getInstance();
-    calendar.add(Calendar.MINUTE, 10);
+    calendar.add(Calendar.MINUTE, 5);
     Date expiresAt = calendar.getTime();
 
     return JWT.create()

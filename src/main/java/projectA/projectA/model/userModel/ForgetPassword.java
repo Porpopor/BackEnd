@@ -7,6 +7,4 @@ import lombok.Data;
 public class ForgetPassword {
 
     private String email;
-
-    private String subject = "Project-backend-Krissakorn";
 }

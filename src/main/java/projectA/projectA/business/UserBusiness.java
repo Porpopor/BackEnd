@@ -18,130 +18,142 @@ import java.util.Optional;
 @Service
 public class UserBusiness {
 
-  private final UserService userService;
-  private final UserMapper userMapper;
-  private final TokenService tokenService;
-  private final SentEmailService sentEmailService;
+    private final UserService userService;
+    private final UserMapper userMapper;
+    private final TokenService tokenService;
+    private final SentEmailService sentEmailService;
 
-  public UserBusiness(UserService userService, UserMapper userMapper, TokenService tokenService, SentEmailService sentEmailService) {
-    this.userService = userService;
-    this.userMapper = userMapper;
-    this.tokenService = tokenService;
-    this.sentEmailService = sentEmailService;
-  }
-
-
-  public Object LoginUser(LoginReq request) throws BaseException{
-
-    Optional<User> byEmail = userService.findByEmail(request.getEmail());
-    if (byEmail.isEmpty()) {
-      throw UserException.loginFailEmailNotFound();
+    public UserBusiness(UserService userService, UserMapper userMapper, TokenService tokenService, SentEmailService sentEmailService) {
+        this.userService = userService;
+        this.userMapper = userMapper;
+        this.tokenService = tokenService;
+        this.sentEmailService = sentEmailService;
     }
-    User user = byEmail.get();
+
+
+    public Object LoginUser(LoginReq request) throws BaseException {
+
+        Optional<User> byEmail = userService.findByEmail(request.getEmail());
+        if (byEmail.isEmpty()) {
+            throw UserException.loginFailEmailNotFound();
+        }
+        User user = byEmail.get();
 //    UserEditResponse userEditResponse = userMapper.UserEditToRegisterResponse(user);
 
-    if (!userService.matchPassword(request.getPassWord(), user.getPassWord())) {
-      throw UserException.loginFailPasswordIncorrect();
-    }
-    String tokenize = tokenService.tokenize(user);
+        if (!userService.matchPassword(request.getPassWord(), user.getPassWord())) {
+            throw UserException.loginFailPasswordIncorrect();
+        }
+        String tokenize = tokenService.tokenize(user);
 //    System.out.printf(tokenize);
-    return new Response().ok("Login success","token",tokenize);
-  }
-
-  public Object LoginAdmin(LoginReq request) throws BaseException {
-
-    Optional<User> byEmail = userService.findByEmail(request.getEmail());
-    User user = byEmail.get();
-
-
-    if (!user.getRole().equals(User.Role.ADMIN)){
-      throw UserException.loginFailEmailNotFound();
+        return new Response().ok("Login success", "token", tokenize);
     }
 
-    String tokenize = tokenService.tokenize(user);
+    public Object LoginAdmin(LoginReq request) throws BaseException {
 
-    return new Response().ok("LoginAdmin success","token",tokenize);
-  }
+        Optional<User> byEmail = userService.findByEmail(request.getEmail());
+        User user = byEmail.get();
 
-  public RegisterResponse register(RegisterReq request) throws BaseException {
-    User user = userService.create(request.getEmail(), request.getFirstName(), request.getLastName(), request.getPassWord());
-    return userMapper.toRegisterResponse(user);
-  }
 
-  public Object forgetPassword(ForgetPassword request) throws UserException, MessagingException {
+        if (!user.getRole().equals(User.Role.ADMIN)) {
+            throw UserException.loginFailEmailNotFound();
+        }
 
-    Optional<User> byEmail = userService.findByEmail(request.getEmail());
-    if (byEmail.isEmpty()) {
-      throw UserException.notFoundEmailForgetPassword();
-    }
-    sentEmailService.forgetPassword(request.getEmail(), request.getSubject());
-    return new Response().success("Sent Email Success");
-  }
+        String tokenize = tokenService.tokenize(user);
 
-  public Object editProfile(UserEditReq request) throws BaseException {
-    User user = tokenService.getUserByIdToken();
-    if (request.getFirstName().isEmpty()||request.getFirstName().equals("")||request.getFirstName().contains(" ")){
-      throw UserException.FirstNameNull();
-    }
-    if (request.getLastName().isEmpty()||request.getLastName().equals("")||request.getLastName().contains(" ")){
-      throw UserException.LastNameNull();
+        return new Response().ok("LoginAdmin success", "token", tokenize);
     }
 
-    userService.upDateProfile(user,request.getFirstName(),request.getLastName(),request.getPhone(),request.getNameCompany());
-    return new Response().success("แก้ไขสำเร็จ");
-  }
-
-  public Object ChangePassWord(UserChangePassWord request) throws BaseException {
-    User user = tokenService.getUserByIdToken();
-
-    if (!userService.matchPassword(request.getOldPassWord(), user.getPassWord())){
-      throw UserException.passwordIncorrect();
+    public RegisterResponse register(RegisterReq request) throws BaseException {
+        User user = userService.create(request.getEmail(), request.getFirstName(), request.getLastName(), request.getPassWord());
+        return userMapper.toRegisterResponse(user);
     }
-    if (userService.matchPassword(request.getNewPassWord(), user.getPassWord())){
-      throw UserException.passwordOldIncorrect();
+
+    public Object forgetPassword(ForgetPassword request) throws UserException, MessagingException {
+
+        Optional<User> byEmail = userService.findByEmail(request.getEmail());
+        if (byEmail.isEmpty()) {
+            throw UserException.notFoundEmailForgetPassword();
+        }
+        sentEmailService.forgetPassword(request.getEmail());
+        return new Response().success("Sent Email Success");
     }
-    if (request.getNewPassWord().isEmpty()||request.getNewPassWord().equals("")||request.getNewPassWord().contains(" ")){
-      throw UserException.createPasswordNull();
+
+    public Object verifyEmail(LoginReq request) throws BaseException, MessagingException {
+        sentEmailService.varifyEmail(request.getEmail());
+        return new Response().success("Sent VerifyEmail Success");
     }
-    userService.ChangePassWord(user,request.getNewPassWord());
 
-    return new Response().success("ChangePassword Success");
-  }
+    public Object editProfile(UserEditReq request) throws BaseException {
+        User user = tokenService.getUserByIdToken();
+        if (request.getFirstName().isEmpty() || request.getFirstName().equals("") || request.getFirstName().contains(" ")) {
+            throw UserException.FirstNameNull();
+        }
+        if (request.getLastName().isEmpty() || request.getLastName().equals("") || request.getLastName().contains(" ")) {
+            throw UserException.LastNameNull();
+        }
 
-  public Object resetPassWord(UserResetPassWord request) throws BaseException {
-    User user = tokenService.getUserByIdToken();
-    if (request.getNewPassWord().isEmpty()||request.getNewPassWord().equals("")||request.getNewPassWord().contains(" ")){
-      throw UserException.createPasswordNull();
+        userService.upDateProfile(user, request.getFirstName(), request.getLastName(), request.getPhone(), request.getNameCompany());
+        return new Response().success("แก้ไขสำเร็จ");
     }
-    if (!request.getNewPassWord().equals(request.getConfirmPassWord())){
-      throw UserException.passwordOldIncorrect();
+
+    public Object ChangePassWord(UserChangePassWord request) throws BaseException {
+        User user = tokenService.getUserByIdToken();
+
+        if (!userService.matchPassword(request.getOldPassWord(), user.getPassWord())) {
+            throw UserException.passwordIncorrect();
+        }
+        if (userService.matchPassword(request.getNewPassWord(), user.getPassWord())) {
+            throw UserException.passwordOldIncorrect();
+        }
+        if (request.getNewPassWord().isEmpty() || request.getNewPassWord().equals("") || request.getNewPassWord().contains(" ")) {
+            throw UserException.createPasswordNull();
+        }
+        userService.ChangePassWord(user, request.getNewPassWord());
+
+        return new Response().success("ChangePassword Success");
     }
-    userService.ChangePassWord(user,request.getNewPassWord());
-    return new Response().success("ResetPassword Success");
 
-  }
+    public Object resetPassWord(UserResetPassWord request) throws BaseException {
 
-  public List<UserProfileResponse> list(){
-    List<User> all = userService.findAll();
-    List<UserProfileResponse> userProfileResponse = userMapper.UserProfileToUserProfileResponse(all);
-    return userProfileResponse;
-  }
+        User user = tokenService.getUserByIdToken();
+        if (request.getNewPassWord().isBlank()) {
+            throw UserException.createPasswordNull();
+        }
+        if (!request.getNewPassWord().equals(request.getConfirmPassWord())) {
+            throw UserException.passwordOldIncorrect();
+        }
+        userService.ChangePassWord(user, request.getNewPassWord());
+        return new Response().success("ResetPassword Success");
 
-  public Object findById() throws BaseException {
+    }
 
-    User userByIdToken = tokenService.getUserByIdToken();
+    public Object verifyEmail() throws BaseException {
+        User user = tokenService.getUserByIdToken();
+        userService.verifyEmail(user);
+        return new Response().success("VerifyEmail Success");
+    }
 
-    Optional<User> byId = userService.findById(userByIdToken.getId());
-    User user = byId.get();
-    UserProfileResponse userProfileResponse = userMapper.UserProfileToResponse(user);
+    public List<UserProfileResponse> list() {
+        List<User> all = userService.findAll();
+        List<UserProfileResponse> userProfileResponse = userMapper.UserProfileToUserProfileResponse(all);
+        return userProfileResponse;
+    }
 
-    return new Response().ok("Profile","data",userProfileResponse);
-  }
+    public Object findById() throws BaseException {
 
-  public Object findByIdCompany() throws BaseException {
-    User userByIdToken = tokenService.getUserByIdToken();
-    List<User> byIdCompany = userService.findByIdCompany(userByIdToken.getId());
-    return new Response().ok("view","data",byIdCompany);
-  }
+        User userByIdToken = tokenService.getUserByIdToken();
+
+        Optional<User> byId = userService.findById(userByIdToken.getId());
+        User user = byId.get();
+        UserProfileResponse userProfileResponse = userMapper.UserProfileToResponse(user);
+
+        return new Response().ok("Profile", "data", userProfileResponse);
+    }
+
+    public Object findByIdCompany() throws BaseException {
+        User userByIdToken = tokenService.getUserByIdToken();
+        List<User> byIdCompany = userService.findByIdCompany(userByIdToken.getId());
+        return new Response().ok("view", "data", byIdCompany);
+    }
 
 }

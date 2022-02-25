@@ -17,4 +17,6 @@ public class UserProfileResponse {
 
   private String picture;
 
+  private Integer verifyEmail;
+
 }

@@ -66,6 +66,12 @@ public class UserController {
     return ResponseEntity.ok(response);
   }
 
+  @PostMapping("/verify-email")
+  public ResponseEntity<Object> verifyEmail() throws BaseException {
+    Object response = userBusiness.verifyEmail();
+    return ResponseEntity.ok(response);
+  }
+
   @GetMapping("/test-user")
   public Object getAllUser(){
     APIResponse apiResponse  = new APIResponse();
