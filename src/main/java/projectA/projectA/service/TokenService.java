@@ -9,9 +9,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import projectA.projectA.entity.Company;
 import projectA.projectA.entity.User;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.exception.UserException;
+import projectA.projectA.repository.CompanyRepository;
 import projectA.projectA.repository.UserRepository;
 
 import java.util.Calendar;
@@ -22,6 +24,7 @@ import java.util.Optional;
 public class TokenService {
 
   private final UserRepository userRepository;
+  private final CompanyRepository companyRepository;
 
   @Value("${app.token.secret}")
   private String secret;
@@ -29,8 +32,9 @@ public class TokenService {
   @Value("${app.token.issuer}")
   private String issuer;
 
-  public TokenService(UserRepository userRepository) {
+  public TokenService(UserRepository userRepository, CompanyRepository companyRepository) {
     this.userRepository = userRepository;
+    this.companyRepository = companyRepository;
   }
 
   public String tokenize(User user) {
@@ -46,7 +50,20 @@ public class TokenService {
       .sign(algorithm());
   }
 
-  public String tokenizeForgetPassword(User user) {
+  public String tokenizeCompany(Company company) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.MINUTE, 60);
+    Date expiresAt = calendar.getTime();
+
+    return JWT.create()
+            .withIssuer(issuer)
+            .withClaim("principal", company.getId().toString())
+            .withClaim("role", "company")
+            .withExpiresAt(expiresAt)
+            .sign(algorithm());
+  }
+
+  public String tokenizeUserForgetPassword(User user) {
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.MINUTE, 5);
     Date expiresAt = calendar.getTime();
@@ -58,6 +75,21 @@ public class TokenService {
             .withExpiresAt(expiresAt)
             .sign(algorithm());
   }
+
+  public String tokenizeCompanyForgetPassword(Company company) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.MINUTE, 5);
+    Date expiresAt = calendar.getTime();
+
+    return JWT.create()
+            .withIssuer(issuer)
+            .withClaim("principal", company.getId().toString())
+            .withClaim("role", "company")
+            .withExpiresAt(expiresAt)
+            .sign(algorithm());
+  }
+
+
 
   public DecodedJWT verify(String token) {
     try {
@@ -86,6 +118,18 @@ public class TokenService {
     }
     User user = opt.get();
     return user;
+  }
+
+  public Company getCompanyByIdToken() throws BaseException {
+
+    int companyId = Integer.parseInt(this.userId());
+
+    Optional<Company> opt = companyRepository.findById(companyId);
+    if (opt.isEmpty()) {
+      throw UserException.notFoundId();
+    }
+    Company company = opt.get();
+    return company;
   }
 
 

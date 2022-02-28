@@ -3,7 +3,7 @@ package projectA.projectA.model.userModel;
 import lombok.Data;
 
 @Data
-public class RegisterReq {
+public class UserRegisterReq {
 
   private String email;
 
@@ -11,5 +11,9 @@ public class RegisterReq {
 
   private String lastName;
 
+  private String sex;
+
   private String passWord;
+
+  private String phone;
 }

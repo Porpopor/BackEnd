@@ -8,9 +8,13 @@ import java.util.Date;
 public class CompanyWorkReq {
 
   private Integer id;
-  private String name;
-  private String detail;
+  private String companyName;
   private String province;
-  private Date date;
-  private Date updateDate;
+  private String district;
+  private String jobTitle;
+  private String salary;
+  private String welfareBenefits;
+  private String detailWork;
+  private String feature;
+  private String contact;
 }

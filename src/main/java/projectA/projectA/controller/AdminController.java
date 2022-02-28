@@ -9,7 +9,7 @@ import projectA.projectA.business.CompanyWorkBusiness;
 import projectA.projectA.business.UserBusiness;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.model.companyWorkModel.CompanyWorkDelete;
-import projectA.projectA.model.userModel.LoginReq;
+import projectA.projectA.model.userModel.UserLoginReq;
 
 @RestController
 @RequestMapping("/admin")
@@ -24,7 +24,7 @@ public class AdminController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<Object>login(@RequestBody LoginReq request) throws BaseException {
+  public ResponseEntity<Object>login(@RequestBody UserLoginReq request) throws BaseException {
     Object response = userBusiness.LoginAdmin(request);
     return ResponseEntity.ok(response);
   }

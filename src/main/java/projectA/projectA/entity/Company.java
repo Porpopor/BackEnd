@@ -10,20 +10,14 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "user_profile")
-public class User extends AutoID {
+@Table(name = "company_profile")
+public class Company extends AutoID {
 
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
-
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
-
-    @Column(name = "sex", nullable = false)
-    private String sex;
+    @Column(name = "company_name", nullable = false)
+    private String companyName;
 
     @JsonIgnore
     @Column(name = "password", nullable = false)
@@ -38,12 +32,11 @@ public class User extends AutoID {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Column(name = "role")
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
-
     @Column(name = "picture", nullable = true)
     private String picture;
+
+    @Column(name = "type", nullable = true)
+    private String type;
 
     @Column(name = "new_email",nullable = true)
     private String newEmail;
@@ -51,8 +44,7 @@ public class User extends AutoID {
     @Column(name = "verify_email", nullable = false)
     private Integer verifyEmail;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<Choice_apply_work> choice;
+    @OneToMany(orphanRemoval = true, mappedBy = "company")
+    private List<CompanyWork> companyWork;
 
-    public enum Role {ADMIN, USER}
 }

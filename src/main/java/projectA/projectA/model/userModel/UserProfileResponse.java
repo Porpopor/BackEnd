@@ -13,10 +13,10 @@ public class UserProfileResponse {
 
   private String phone;
 
-  private String nameCompany;
-
   private String picture;
 
   private Integer verifyEmail;
+
+  private String role;
 
 }

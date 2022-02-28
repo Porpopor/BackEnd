@@ -9,6 +9,8 @@ import projectA.projectA.model.APIResponse;
 import projectA.projectA.model.userModel.*;
 import projectA.projectA.repository.UserRepository;
 
+import javax.mail.MessagingException;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -23,7 +25,7 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<Object> login(@RequestBody LoginReq request) throws BaseException {
+  public ResponseEntity<Object> login(@RequestBody UserLoginReq request) throws BaseException {
 //    String response = userBusiness.Login(request);
     Object respones = userBusiness.LoginUser(request);
 //    APIResponse apiResponse = new APIResponse();
@@ -32,11 +34,9 @@ public class UserController {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<APIResponse> register(@RequestBody RegisterReq request)throws BaseException {
-    RegisterResponse response = userBusiness.register(request);
-    APIResponse apiResponse = new APIResponse();
-    apiResponse.setData(response);
-    return ResponseEntity.ok(apiResponse);
+  public ResponseEntity<Object> register(@RequestBody UserRegisterReq request)throws BaseException {
+    Object response = userBusiness.register(request);
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping("/profile")
@@ -45,28 +45,44 @@ public class UserController {
     return ResponseEntity.ok(response);
   }
 
-  @PostMapping("/editUser")
+  @PutMapping("/editUser")
   public ResponseEntity<Object> editUser(@RequestBody UserEditReq request) throws BaseException {
-    Object response = userBusiness.editProfile(request);
-//    APIResponse apiResponse = new APIResponse();
-//    apiResponse.setData(response);
+    Object response = userBusiness.editUserProfile(request);
     return ResponseEntity.ok(response);
 
   }
 
-  @PostMapping("/changePassword")
-  public ResponseEntity<Object>changePassword(@RequestBody UserChangePassWord request) throws BaseException {
+  @PutMapping("/change-email")
+  public ResponseEntity<Object>changeEmail(@RequestBody UserEmailReq request) throws BaseException, MessagingException {
+    Object response = userBusiness.changeEmail(request);
+    return ResponseEntity.ok(response);
+  }
+
+  @PutMapping("/change-Password")
+  public ResponseEntity<Object>changePassword(@RequestBody UserChangePassword request) throws BaseException {
     Object response = userBusiness.ChangePassWord(request);
     return ResponseEntity.ok(response);
   }
 
-  @PostMapping("/reset-password")
+  @PutMapping("/reset-password")
   public ResponseEntity<Object>resetPassword(@RequestBody UserResetPassWord request) throws BaseException {
     Object response = userBusiness.resetPassWord(request);
     return ResponseEntity.ok(response);
   }
 
-  @PostMapping("/verify-email")
+  @PostMapping("/userForget-password")
+  public ResponseEntity<Object> forgetPassword(@RequestBody UserForgetPassword request) throws BaseException, MessagingException {
+    Object response = userBusiness.userForgetPassword(request);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/sentVerify-email")
+  public ResponseEntity<Object> sentVerifyEmail() throws BaseException, MessagingException {
+    Object response = userBusiness.sentVerifyEmail();
+    return ResponseEntity.ok(response);
+  }
+
+  @PutMapping ("/verify-email")
   public ResponseEntity<Object> verifyEmail() throws BaseException {
     Object response = userBusiness.verifyEmail();
     return ResponseEntity.ok(response);

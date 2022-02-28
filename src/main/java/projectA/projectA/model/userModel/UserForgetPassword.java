@@ -1,10 +1,10 @@
 package projectA.projectA.model.userModel;
 
+
 import lombok.Data;
 
 @Data
-public class RegisterResponse {
+public class UserForgetPassword {
 
-  private String email;
-
+    private String email;
 }

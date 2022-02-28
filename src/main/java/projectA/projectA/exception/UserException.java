@@ -46,6 +46,18 @@ public class UserException extends BaseException {
     return new UserException("lastname.null");
 
   }
+  public static UserException sexNull() {
+
+    return new UserException("sex.null");
+
+  }
+
+
+  public static UserException phoneNull() {
+
+    return new UserException("phone.null");
+
+  }
 
   public static UserException requestInvalid() {
 

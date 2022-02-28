@@ -11,22 +11,25 @@ import java.util.Optional;
 
 public interface CompanyWorkRepository extends JpaRepository<CompanyWork, Integer> {
 
-  Optional<CompanyWork> findById(Integer id);
+    Optional<CompanyWork> findById(Integer id);
 
-  List<CompanyWork> findByUser(User user);
+    @Query("""
+            select a
+            from CompanyWork a , Company b 
+            where a.company.id = b.id
+            """)
+    List<CompanyWork> EditfindById();
 
-  @Query("""
+    @Query("""
             select a
             from CompanyWork a
             where a.province
             like %:province%
-            and a.name
+            and a.companyName
             like %:name%
             order by a.id desc
             """)
-  List<CompanyWork> findBySearchProvince(@Param("province") String comp, @Param("name") String  name);
+    List<CompanyWork> findBySearchProvince(@Param("province") String comp, @Param("name") String name);
 
-  boolean existsByIdAndUser(Integer integer, User user);
-
-  //  select * from company_work where province like '%ข%'
+    //  select * from company_work where province like '%ข%'
 }

@@ -18,12 +18,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findById(int userId);
 
-    @Query("""
-          select a 
-          from User a,CompanyWork b 
-          where a.id = :id 
-          and a.id = b.user.id
-          """)
-    List<User>findByIdCompany(@Param("id") Integer user);
+//    @Query("""
+//          select a
+//          from User a,CompanyWork b
+//          where a.id = :id
+//          and a.id = b.user.id
+//          """)
+//    List<User>findByIdCompany(@Param("id") Integer user);
 
 }

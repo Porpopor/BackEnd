@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -15,24 +17,44 @@ public class CompanyWork {
   @Column(name = "id")
   private Integer id;
 
-  @Column(name = "name")
-  private String name;
+  @Column(name = "company_name", nullable = false) //ชื่อบริษัท
+  private String companyName;
 
-  @Column(name = "detail")
-  private String detail;
-
-  @Column(name = "province", nullable = false)
+  @Column(name = "province", nullable = false) // จังหวัด
   private String province;
 
-  @JsonFormat(pattern = "dd-MM-yyyy")
+  @Column(name = "district", nullable = false) // อำเภอ
+  private String district;
+
+  @Column(name = "job_title", nullable = false) // ตำแหน่งงาน
+  private String jobTitle;
+
+  @Column(name = "salary", nullable = false) // เงินเดือน
+  private String salary;
+
+  @Column(name = "welfare_benefits", nullable = true) // สวัสดิการ
+  private String welfareBenefits;
+
+  @Column(name = "detail_work", nullable = true) // รายละเอียดงาน
+  private String detailWork;
+
+  @Column(name = "feature", nullable = true) // คุณสมบัติ
+  private String feature;
+
+  @Column(name = "contact", nullable = false) // ติดต่อที่
+  private String contact;
+
   @Column(name = "create_date", nullable = false)
   private Date date = new Date();
 
-  @JsonFormat(pattern = "dd-MM-yyyy")
   @Column(name = "update_date", nullable = false)
   private Date updateDate = new Date();
 
   @ManyToOne
-  @JoinColumn(name = "user_id",nullable = false)
-  private User user;
+  @JoinColumn(name = "company_id",nullable = false) //company id
+  private Company company;
+
+  @OneToMany(mappedBy = "CompanyWork",orphanRemoval = true)
+  private List<Choice_apply_work> choice_apply_works;
+
 }

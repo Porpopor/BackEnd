@@ -1,6 +1,7 @@
 package projectA.projectA.service;
 
 import org.springframework.stereotype.Service;
+import projectA.projectA.entity.Company;
 import projectA.projectA.entity.CompanyWork;
 import projectA.projectA.entity.User;
 import projectA.projectA.exception.CompanyWorkException;
@@ -14,66 +15,86 @@ import java.util.Optional;
 @Service
 public class CompanyWorkService {
 
-  private final CompanyWorkRepository companyWorkRepository;
+    private final CompanyWorkRepository companyWorkRepository;
 
-  public CompanyWorkService(CompanyWorkRepository companyWorkRepository) {
-    this.companyWorkRepository = companyWorkRepository;
-  }
+    public CompanyWorkService(CompanyWorkRepository companyWorkRepository) {
+        this.companyWorkRepository = companyWorkRepository;
+    }
 
-  public CompanyWork createCompanyWork(User user, String name, String detail, String province) {
+    public CompanyWork createCompanyWork(Company company,
+                                         String companyName,
+                                         String province,
+                                         String district,
+                                         String jobTitle,
+                                         String salary,
+                                         String welfareBenefits,
+                                         String detailWork,
+                                         String feature,
+                                         String contact) {
 
-    CompanyWork entity = new CompanyWork();
+        CompanyWork entity = new CompanyWork();
 
-    entity.setUser(user);
-    entity.setName(name);
-    entity.setDetail(detail);
-    entity.setProvince(province);
-    companyWorkRepository.save(entity);
-    return entity;
-  }
+        entity.setCompany(company);
+        entity.setCompanyName(companyName);
+        entity.setProvince(province);
+        entity.setDistrict(district);
+        entity.setJobTitle(jobTitle);
+        entity.setSalary(salary);
+        entity.setWelfareBenefits(welfareBenefits);
+        entity.setDetailWork(detailWork);
+        entity.setFeature(feature);
+        entity.setContact(contact);
+        entity.setDate(new Date());
+        entity.setUpdateDate(new Date());
 
-  public void editCompanyWork(User user, int id, String name, String detail, String province) {
+        companyWorkRepository.save(entity);
+        return entity;
+    }
 
-    Optional<CompanyWork> comp = companyWorkRepository.findById(id);
+    public void editCompanyWork(
+            CompanyWork companyWork,
+            String companyName,
+            String province,
+            String district,
+            String jobTitle,
+            String salary,
+            String welfareBenefits,
+            String detailWork,
+            String feature,
+            String contact) {
 
-    CompanyWork entity = comp.get();
+        companyWork.setCompanyName(companyName);
+        companyWork.setProvince(province);
+        companyWork.setDistrict(district);
+        companyWork.setJobTitle(jobTitle);
+        companyWork.setSalary(salary);
+        companyWork.setWelfareBenefits(welfareBenefits);
+        companyWork.setDetailWork(detailWork);
+        companyWork.setFeature(feature);
+        companyWork.setContact(contact);
+        companyWork.setUpdateDate(new Date());
+        companyWorkRepository.save(companyWork);
+    }
 
-    entity.setUser(user);
-    entity.setName(name);
-    entity.setDetail(detail);
-    entity.setProvince(province);
-    entity.setUpdateDate(new Date());
-    companyWorkRepository.save(entity);
-  }
+    public List<CompanyWork> findAll() {
+        List<CompanyWork> all = companyWorkRepository.findAll();
+        return all;
+    }
 
-  public List<CompanyWork> findByUser(User user) {
-    List<CompanyWork> companyWorks = companyWorkRepository.findByUser(user);
-    return companyWorks;
-  }
+    public List<CompanyWork> findByProvince(CompanyWorkReq request) {
+        List<CompanyWork> byProvince = companyWorkRepository.findBySearchProvince(request.getProvince(), request.getCompanyName());
+        return byProvince;
+    }
 
-  public List<CompanyWork> findAll() {
-    List<CompanyWork> all = companyWorkRepository.findAll();
-    return all;
-  }
+    public CompanyWork findById(Integer id) throws CompanyWorkException {
+        Optional<CompanyWork> byId = companyWorkRepository.findById(id);
+        return byId.get();
+    }
 
-  public List<CompanyWork> findByProvince(CompanyWorkReq request) {
-    List<CompanyWork> byProvince = companyWorkRepository.findBySearchProvince(request.getProvince(), request.getName());
-    return byProvince;
-  }
+    public void deleteById(Integer id) {
 
-  public CompanyWork findById(Integer id) throws CompanyWorkException {
-    Optional<CompanyWork> byId = companyWorkRepository.findById(id);
-    return byId.get();
-  }
+        companyWorkRepository.deleteById(id);
 
-  public void deleteById(Integer id) {
-
-    companyWorkRepository.deleteById(id);
-
-  }
-
-  public boolean existsByIdAndUser(Integer id, User user) {
-    return companyWorkRepository.existsByIdAndUser(id, user);
-  }
+    }
 
 }

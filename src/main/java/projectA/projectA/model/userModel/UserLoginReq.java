@@ -3,7 +3,7 @@ package projectA.projectA.model.userModel;
 import lombok.Data;
 
 @Data
-public class LoginReq {
+public class UserLoginReq {
 
   private String email;
 

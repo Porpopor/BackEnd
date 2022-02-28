@@ -31,7 +31,7 @@ public class UserBusiness {
     }
 
 
-    public Object LoginUser(LoginReq request) throws BaseException {
+    public Object LoginUser(UserLoginReq request) throws BaseException {
 
         Optional<User> byEmail = userService.findByEmail(request.getEmail());
         if (byEmail.isEmpty()) {
@@ -48,7 +48,7 @@ public class UserBusiness {
         return new Response().ok("Login success", "token", tokenize);
     }
 
-    public Object LoginAdmin(LoginReq request) throws BaseException {
+    public Object LoginAdmin(UserLoginReq request) throws BaseException {
 
         Optional<User> byEmail = userService.findByEmail(request.getEmail());
         User user = byEmail.get();
@@ -63,40 +63,81 @@ public class UserBusiness {
         return new Response().ok("LoginAdmin success", "token", tokenize);
     }
 
-    public RegisterResponse register(RegisterReq request) throws BaseException {
-        User user = userService.create(request.getEmail(), request.getFirstName(), request.getLastName(), request.getPassWord());
-        return userMapper.toRegisterResponse(user);
+    public Object register(UserRegisterReq request) throws BaseException {
+
+        if (request.getEmail().isBlank()) {
+            throw UserException.EmailNull();
+        }
+        if (request.getFirstName().isBlank()) {
+            throw UserException.FirstNameNull();
+        }
+        if (request.getLastName().isEmpty()) {
+            throw UserException.LastNameNull();
+        }
+        if (request.getPassWord().isEmpty()) {
+            throw UserException.createPasswordNull();
+        }
+        if (request.getPhone().isEmpty()) {
+            throw UserException.phoneNull();
+        }
+        if (request.getSex().isEmpty()) {
+            throw UserException.sexNull();
+        }
+        if (userService.existsByEmail(request.getEmail())) {
+            throw UserException.EmailDuplicated();
+        }
+
+        userService.createUser(request.getEmail(), request.getFirstName(), request.getSex(), request.getLastName(), request.getPassWord(), request.getPhone());
+        return new Response().success("Register Success");
     }
 
-    public Object forgetPassword(ForgetPassword request) throws UserException, MessagingException {
+    public Object editUserProfile(UserEditReq request) throws BaseException {
+        User user = tokenService.getUserByIdToken();
+        if (request.getFirstName().isBlank()) {
+            throw UserException.FirstNameNull();
+        }
+        if (request.getLastName().isBlank()) {
+            throw UserException.LastNameNull();
+        }
+        if (request.getPhone().isEmpty()) {
+            throw UserException.phoneNull();
+        }
+        if (request.getSex().isEmpty()) {
+            throw UserException.sexNull();
+        }
+
+        userService.upDateProfile(user, request.getFirstName(), request.getLastName(), request.getSex(), request.getPhone());
+        return new Response().success("แก้ไขสำเร็จ");
+    }
+
+    public Object userForgetPassword(UserForgetPassword request) throws UserException, MessagingException {
 
         Optional<User> byEmail = userService.findByEmail(request.getEmail());
         if (byEmail.isEmpty()) {
             throw UserException.notFoundEmailForgetPassword();
         }
-        sentEmailService.forgetPassword(request.getEmail());
+        sentEmailService.userForgetPassword(request.getEmail());
         return new Response().success("Sent Email Success");
     }
 
-    public Object verifyEmail(LoginReq request) throws BaseException, MessagingException {
-        sentEmailService.varifyEmail(request.getEmail());
+    public Object sentVerifyEmail() throws BaseException, MessagingException {
+        User userByIdToken = tokenService.getUserByIdToken();
+        sentEmailService.userVerifyEmail(userByIdToken.getEmail());
         return new Response().success("Sent VerifyEmail Success");
     }
 
-    public Object editProfile(UserEditReq request) throws BaseException {
-        User user = tokenService.getUserByIdToken();
-        if (request.getFirstName().isEmpty() || request.getFirstName().equals("") || request.getFirstName().contains(" ")) {
-            throw UserException.FirstNameNull();
-        }
-        if (request.getLastName().isEmpty() || request.getLastName().equals("") || request.getLastName().contains(" ")) {
-            throw UserException.LastNameNull();
-        }
+    public Object changeEmail(UserEmailReq request) throws BaseException, MessagingException {
 
-        userService.upDateProfile(user, request.getFirstName(), request.getLastName(), request.getPhone(), request.getNameCompany());
-        return new Response().success("แก้ไขสำเร็จ");
+        User user = tokenService.getUserByIdToken();
+        if (request.getEmail().isBlank()) {
+            throw UserException.EmailNull();
+        }
+        userService.changeEmail(user, request.getEmail());
+        sentEmailService.userVerifyEmail(request.getEmail());
+        return new Response().success("Change Email Success");
     }
 
-    public Object ChangePassWord(UserChangePassWord request) throws BaseException {
+    public Object ChangePassWord(UserChangePassword request) throws BaseException {
         User user = tokenService.getUserByIdToken();
 
         if (!userService.matchPassword(request.getOldPassWord(), user.getPassWord())) {
@@ -148,12 +189,6 @@ public class UserBusiness {
         UserProfileResponse userProfileResponse = userMapper.UserProfileToResponse(user);
 
         return new Response().ok("Profile", "data", userProfileResponse);
-    }
-
-    public Object findByIdCompany() throws BaseException {
-        User userByIdToken = tokenService.getUserByIdToken();
-        List<User> byIdCompany = userService.findByIdCompany(userByIdToken.getId());
-        return new Response().ok("view", "data", byIdCompany);
     }
 
 }
