@@ -29,6 +29,12 @@ public class UserException extends BaseException {
 
   }
 
+  public static UserException emailVerified() {
+
+    return new UserException("email.verified");
+
+  }
+
   public static UserException createPasswordNull() {
 
     return new UserException("password.null");

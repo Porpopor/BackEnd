@@ -3,6 +3,7 @@ package projectA.projectA.business;
 import org.springframework.stereotype.Service;
 import projectA.projectA.entity.User;
 import projectA.projectA.exception.BaseException;
+import projectA.projectA.exception.CompanyException;
 import projectA.projectA.exception.UserException;
 import projectA.projectA.mapper.UserMapper;
 import projectA.projectA.model.Response;
@@ -17,6 +18,8 @@ import java.util.Optional;
 
 @Service
 public class UserBusiness {
+
+    UserUploadFile url = new UserUploadFile();
 
     private final UserService userService;
     private final UserMapper userMapper;
@@ -87,7 +90,7 @@ public class UserBusiness {
             throw UserException.EmailDuplicated();
         }
 
-        userService.createUser(request.getEmail(), request.getFirstName(), request.getSex(), request.getLastName(), request.getPassWord(), request.getPhone());
+        userService.createUser(request.getEmail(), request.getFirstName(),request.getLastName(), request.getSex(), request.getPassWord(), request.getPhone());
         return new Response().success("Register Success");
     }
 
@@ -116,13 +119,14 @@ public class UserBusiness {
         if (byEmail.isEmpty()) {
             throw UserException.notFoundEmailForgetPassword();
         }
-        sentEmailService.userForgetPassword(request.getEmail());
+        User user = byEmail.get();
+        sentEmailService.userForgetPassword(user, request.getEmail());
         return new Response().success("Sent Email Success");
     }
 
     public Object sentVerifyEmail() throws BaseException, MessagingException {
-        User userByIdToken = tokenService.getUserByIdToken();
-        sentEmailService.userVerifyEmail(userByIdToken.getEmail());
+        User user = tokenService.getUserByIdToken();
+        sentEmailService.userVerifyEmail(user, user.getEmail());
         return new Response().success("Sent VerifyEmail Success");
     }
 
@@ -132,8 +136,11 @@ public class UserBusiness {
         if (request.getEmail().isBlank()) {
             throw UserException.EmailNull();
         }
+        if (user.getEmail().equals(request.getEmail())) {
+            throw UserException.emailVerified();
+        }
         userService.changeEmail(user, request.getEmail());
-        sentEmailService.userVerifyEmail(request.getEmail());
+        sentEmailService.userVerifyEmail(user, request.getEmail());
         return new Response().success("Change Email Success");
     }
 
@@ -159,6 +166,9 @@ public class UserBusiness {
         User user = tokenService.getUserByIdToken();
         if (request.getNewPassWord().isBlank()) {
             throw UserException.createPasswordNull();
+        }
+        if (request.getConfirmPassWord().isBlank()) {
+            throw CompanyException.passwordNull();
         }
         if (!request.getNewPassWord().equals(request.getConfirmPassWord())) {
             throw UserException.passwordOldIncorrect();
@@ -186,6 +196,7 @@ public class UserBusiness {
 
         Optional<User> byId = userService.findById(userByIdToken.getId());
         User user = byId.get();
+        user.setPicture(url.getHost() + url.getDir() + user.getPicture());
         UserProfileResponse userProfileResponse = userMapper.UserProfileToResponse(user);
 
         return new Response().ok("Profile", "data", userProfileResponse);

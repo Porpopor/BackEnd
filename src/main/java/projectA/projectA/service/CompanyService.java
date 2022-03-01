@@ -84,4 +84,9 @@ public class CompanyService {
         company.setPassWord(passwordEncoder.encode(password));
         companyRepository.save(company);
     }
+
+    public boolean existsByEmail(String email){
+        boolean byEmail = companyRepository.existsByEmail(email);
+        return byEmail;
+    }
 }

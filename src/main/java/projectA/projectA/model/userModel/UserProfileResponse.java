@@ -17,6 +17,8 @@ public class UserProfileResponse {
 
   private Integer verifyEmail;
 
+  private String sex;
+
   private String role;
 
 }

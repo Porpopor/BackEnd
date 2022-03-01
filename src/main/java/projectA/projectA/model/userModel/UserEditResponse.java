@@ -13,4 +13,6 @@ public class UserEditResponse {
   private String phone;
 
   private String picture;
+
+  private String sex;
 }

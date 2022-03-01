@@ -29,10 +29,8 @@ public class SentEmailService {
         this.companyService = companyService;
     }
 
-    public void userForgetPassword(String toEmail) throws MessagingException {
+    public void userForgetPassword(User user,String toEmail) throws MessagingException {
 
-        Optional<User> byEmail = userService.findByEmail(toEmail);
-        User user = byEmail.get();
         String token = tokenService.tokenizeUserForgetPassword(user);
         String subject = "ResetPassword Project A";
         String body = "<a href=\"http://localhost:4200/reset-password/"+ token + "\">ResetPassWord</a>";
@@ -49,9 +47,8 @@ public class SentEmailService {
         System.out.println("Mail Sent Success...");
     }
 
-    public void userVerifyEmail(String email) throws MessagingException {
-        Optional<User> byEmail = userService.findByEmail(email);
-        User user = byEmail.get();
+    public void userVerifyEmail(User user,String toEmail) throws MessagingException {
+
         String token = tokenService.tokenize(user);
         String subject = "VerifyEmail Project A";
         String body = "<a href=\"http://localhost:4200/verify-email/"+ token + "\">VerifyEmail!</a>";
@@ -59,7 +56,7 @@ public class SentEmailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
         messageHelper.setFrom(fromEmail);
-        messageHelper.setTo(user.getEmail());
+        messageHelper.setTo(toEmail);
         messageHelper.setSubject(subject);
         messageHelper.setText(body,true);
 

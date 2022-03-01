@@ -58,6 +58,9 @@ public class CompanyBusiness {
         if (request.getType().isBlank()) {
             throw CompanyException.typeNull();
         }
+        if(companyService.existsByEmail(request.getEmail())){
+            throw CompanyException.emailDuplicated();
+        }
         companyService.register(request.getEmail(), request.getCompanyName(), request.getPassWord(), request.getPhone(), request.getType());
         return new Response().success("Register Success");
     }
@@ -121,6 +124,9 @@ public class CompanyBusiness {
     public Object changeEmail(CompanyEmailReq request) throws BaseException, MessagingException {
 
         Company companyByIdToken = tokenService.getCompanyByIdToken();
+        if (request.getEmail().isBlank()){
+            throw CompanyException.emailNull();
+        }
         if (companyByIdToken.getEmail().equals(request.getEmail())) {
             throw CompanyException.emailVerified();
         }

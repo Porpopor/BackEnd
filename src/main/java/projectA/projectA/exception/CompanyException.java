@@ -34,6 +34,11 @@ public class CompanyException extends BaseException{
 
   }
 
+  public static CompanyException emailDuplicated(){
+
+    return new CompanyException("emailDuplicated");
+  }
+
   public static CompanyException nameNull() {
 
     return new CompanyException("name.null");
