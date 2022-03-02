@@ -3,7 +3,6 @@ package projectA.projectA.service;
 import org.springframework.stereotype.Service;
 import projectA.projectA.entity.Company;
 import projectA.projectA.entity.CompanyWork;
-import projectA.projectA.entity.User;
 import projectA.projectA.exception.CompanyWorkException;
 import projectA.projectA.model.companyWorkModel.CompanyWorkReq;
 import projectA.projectA.repository.CompanyWorkRepository;
@@ -95,6 +94,13 @@ public class CompanyWorkService {
 
         companyWorkRepository.deleteById(id);
 
+    }
+
+    public List<CompanyWork> FindByIdCompany(Integer id){
+
+        List<CompanyWork> companyWorks = companyWorkRepository.FindByIdCompany(id);
+
+        return companyWorks;
     }
 
 }

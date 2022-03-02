@@ -31,7 +31,7 @@ public class Response {
     return res;
   }
 
-  public Object okLogin(String message,String key, Object value,String profile, Object user) {
+  public Object okLogin(String message,String key, Object value,String profile,Object value2) {
 
     Map<Object, Object> res = new HashMap<>();
 
@@ -44,7 +44,7 @@ public class Response {
     Map<Object, Object> data2 = new HashMap<>();
 
     data.put(key, value);
-    data2.put(profile, user);
+    data2.put(profile, value2);
     res.put("data", data);
     res.put("profile", data2);
 

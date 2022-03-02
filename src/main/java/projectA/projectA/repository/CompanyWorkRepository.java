@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import projectA.projectA.entity.CompanyWork;
-import projectA.projectA.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,10 +14,10 @@ public interface CompanyWorkRepository extends JpaRepository<CompanyWork, Intege
 
     @Query("""
             select a
-            from CompanyWork a , Company b 
-            where a.company.id = b.id
+            from CompanyWork a
+            where a.company.id = :id
             """)
-    List<CompanyWork> EditfindById();
+    List<CompanyWork> FindByIdCompany(@Param("id") Integer comp);
 
     @Query("""
             select a

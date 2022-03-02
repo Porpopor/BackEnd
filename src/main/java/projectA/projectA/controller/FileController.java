@@ -7,7 +7,7 @@ import projectA.projectA.entity.User;
 import projectA.projectA.exception.UserException;
 import projectA.projectA.model.Response;
 import projectA.projectA.model.companyModel.CompanyUploadProFile;
-import projectA.projectA.model.userModel.UserUploadFile;
+import projectA.projectA.model.UploadFileReq;
 import projectA.projectA.repository.CompanyRepository;
 import projectA.projectA.repository.UserRepository;
 import projectA.projectA.service.TokenService;
@@ -38,9 +38,9 @@ public class FileController {
 
         System.out.println(uploadDirectory);
         User user = tokenService.getUserByIdToken();
-        String dir = new UserUploadFile().getDir();
-        String timeStamp = new UserUploadFile().getTimeStamp();
-        String imgName = new UserUploadFile().getImgName();
+        String dir = new UploadFileReq().getDirUserProfile();
+        String timeStamp = new UploadFileReq().getTimeStamp();
+        String imgName = new UploadFileReq().getImgName();
 
         //validate file
         if (file == null) {

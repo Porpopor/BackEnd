@@ -79,8 +79,7 @@ public class UserService {
     }
     public void changeEmail(User user,String email){
 
-        user.setEmail(email);
-        user.setVerifyEmail(0);
+        user.setNewEmail(email);
         user.setUpdateDate(new Date());
         userRepository.save(user);
     }
@@ -109,8 +108,8 @@ public class UserService {
         userRepository.save(entity);
     }
 
-    public void verifyEmail(User user) {
-
+    public void verifyEmail(User user,String email) {
+        user.setEmail(email);
         user.setVerifyEmail(1);
         user.setUpdateDate(new Date());
         userRepository.save(user);

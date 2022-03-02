@@ -41,10 +41,16 @@ public class Company extends AutoID {
     @Column(name = "new_email",nullable = true)
     private String newEmail;
 
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.COMPANY;
+
     @Column(name = "verify_email", nullable = false)
     private Integer verifyEmail;
 
     @OneToMany(orphanRemoval = true, mappedBy = "company")
     private List<CompanyWork> companyWork;
+
+    public enum Role {ADMIN, COMPANY}
 
 }

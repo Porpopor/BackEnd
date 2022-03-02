@@ -78,7 +78,7 @@ public class CompanyWorkBusiness {
                 request.getDetailWork(),
                 request.getFeature(),
                 request.getContact());
-        return new Response().success("test");
+        return new Response().success("Create Success");
     }
 
     public Object editCompanyWork(Integer id, CompanyWorkReq request) throws BaseException {
@@ -139,6 +139,19 @@ public class CompanyWorkBusiness {
                 request.getFeature(),
                 request.getContact());
         return new Response().success("แก้ไขสำเร็จ");
+    }
+
+    public Object editFindById() throws BaseException {
+
+        Company companyByIdToken = tokenService.getCompanyByIdToken();
+
+        System.out.println(companyByIdToken.getId());
+
+        List<CompanyWork> companyWorks = companyWorkService.FindByIdCompany(companyByIdToken.getId());
+        List<CompanyWorkResponse> companyWorkResponse= companyWorkMapper.toListCompanyWorkResponse(companyWorks);
+
+        return new Response().ok("company work","list",companyWorkResponse);
+
     }
 
     public Object findById(CompanyWorkReq id) throws CompanyWorkException {

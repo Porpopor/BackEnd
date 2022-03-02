@@ -73,4 +73,16 @@ public class CompanyController {
         Object response = companyBusiness.companyResetPassword(request);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/profile")
+    public ResponseEntity<Object>companyProfile() throws BaseException {
+        Object response = companyBusiness.findById();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/check-role")
+    public ResponseEntity<Object>checkRoleUser() throws BaseException {
+        Object response = companyBusiness.checkRoleCompany();
+        return ResponseEntity.ok(response);
+    }
 }

@@ -88,6 +88,12 @@ public class UserController {
     return ResponseEntity.ok(response);
   }
 
+  @GetMapping("/check-role")
+  public ResponseEntity<Object>checkRoleUser() throws BaseException {
+    Object response = userBusiness.checkRoleUser();
+    return ResponseEntity.ok(response);
+  }
+
   @GetMapping("/test-user")
   public Object getAllUser(){
     APIResponse apiResponse  = new APIResponse();

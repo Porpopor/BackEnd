@@ -7,6 +7,7 @@ import projectA.projectA.exception.CompanyException;
 import projectA.projectA.exception.UserException;
 import projectA.projectA.mapper.UserMapper;
 import projectA.projectA.model.Response;
+import projectA.projectA.model.UploadFileReq;
 import projectA.projectA.model.userModel.*;
 import projectA.projectA.service.SentEmailService;
 import projectA.projectA.service.TokenService;
@@ -19,7 +20,7 @@ import java.util.Optional;
 @Service
 public class UserBusiness {
 
-    UserUploadFile url = new UserUploadFile();
+    UploadFileReq url = new UploadFileReq();
 
     private final UserService userService;
     private final UserMapper userMapper;
@@ -48,7 +49,7 @@ public class UserBusiness {
         }
         String tokenize = tokenService.tokenize(user);
 //    System.out.printf(tokenize);
-        return new Response().ok("Login success", "token", tokenize);
+        return new Response().okLogin("Login success", "token", tokenize,"role",user.getRole());
     }
 
     public Object LoginAdmin(UserLoginReq request) throws BaseException {
@@ -180,7 +181,7 @@ public class UserBusiness {
 
     public Object verifyEmail() throws BaseException {
         User user = tokenService.getUserByIdToken();
-        userService.verifyEmail(user);
+        userService.verifyEmail(user,user.getNewEmail());
         return new Response().success("VerifyEmail Success");
     }
 
@@ -196,10 +197,20 @@ public class UserBusiness {
 
         Optional<User> byId = userService.findById(userByIdToken.getId());
         User user = byId.get();
-        user.setPicture(url.getHost() + url.getDir() + user.getPicture());
+        user.setPicture(url.getHost() + url.getDirUserProfile() + user.getPicture());
         UserProfileResponse userProfileResponse = userMapper.UserProfileToResponse(user);
 
         return new Response().ok("Profile", "data", userProfileResponse);
+    }
+
+    public Object checkRoleUser() throws BaseException {
+
+        User userByIdToken = tokenService.getUserByIdToken();
+
+        Optional<User> byId = userService.findById(userByIdToken.getId());
+        User user = byId.get();
+
+        return new Response().ok("Profile", "role", user.getRole());
     }
 
 }

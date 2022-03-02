@@ -3,6 +3,7 @@ package projectA.projectA.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import projectA.projectA.entity.Company;
+import projectA.projectA.entity.User;
 import projectA.projectA.model.companyModel.CompanyEmailReq;
 import projectA.projectA.repository.CompanyRepository;
 
@@ -83,6 +84,12 @@ public class CompanyService {
     public void changePassword(Company company, String password){
         company.setPassWord(passwordEncoder.encode(password));
         companyRepository.save(company);
+    }
+
+    public Optional<Company> findById(Integer id){
+        Optional<Company> byId = companyRepository.findById(id);
+
+        return byId;
     }
 
     public boolean existsByEmail(String email){

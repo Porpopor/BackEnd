@@ -51,5 +51,11 @@ public class CompanyWorkController {
         Object response = companyWorkBusiness.findById(req);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/list-byCompany")
+    public ResponseEntity<Object> listByCompany() throws BaseException {
+        Object response = companyWorkBusiness.editFindById();
+        return ResponseEntity.ok(response);
+    }
 }
 

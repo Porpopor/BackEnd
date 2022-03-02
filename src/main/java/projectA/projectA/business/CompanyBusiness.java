@@ -4,7 +4,9 @@ import org.springframework.stereotype.Service;
 import projectA.projectA.entity.Company;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.exception.CompanyException;
+import projectA.projectA.mapper.CompanyMapper;
 import projectA.projectA.model.Response;
+import projectA.projectA.model.UploadFileReq;
 import projectA.projectA.model.companyModel.*;
 import projectA.projectA.service.CompanyService;
 import projectA.projectA.service.SentEmailService;
@@ -16,14 +18,18 @@ import java.util.Optional;
 @Service
 public class CompanyBusiness {
 
+    UploadFileReq url = new UploadFileReq();
+
     private final CompanyService companyService;
     private final TokenService tokenService;
     private final SentEmailService sentEmailService;
+    private final CompanyMapper companyMapper;
 
-    public CompanyBusiness(CompanyService companyService, TokenService tokenService, SentEmailService sentEmailService) {
+    public CompanyBusiness(CompanyService companyService, TokenService tokenService, SentEmailService sentEmailService, CompanyMapper companyMapper) {
         this.companyService = companyService;
         this.tokenService = tokenService;
         this.sentEmailService = sentEmailService;
+        this.companyMapper = companyMapper;
     }
 
     public Object login(CompanyLogin request) throws BaseException {
@@ -38,7 +44,7 @@ public class CompanyBusiness {
 
         String token = tokenService.tokenizeCompany(company);
 
-        return new Response().ok("Login Success", "token", token);
+        return new Response().okLogin("Login Success", "token", token,"role",company.getRole());
 
     }
 
@@ -145,6 +151,24 @@ public class CompanyBusiness {
         Company companyByIdToken = tokenService.getCompanyByIdToken();
         companyService.verifyEmail(companyByIdToken, companyByIdToken.getNewEmail());
         return new Response().success("Verified Email Success");
+    }
+
+    public Object findById() throws BaseException {
+        Company companyByIdToken = tokenService.getCompanyByIdToken();
+        Optional<Company> byId = companyService.findById(companyByIdToken.getId());
+        Company company = byId.get();
+        company.setPicture(url.getHost() + url.getDirCompanyProfile() + company.getPicture());
+        CompanyProfileResponse companyProfileResponse = companyMapper.CompanyProfileToResponse(company);
+
+        return new Response().ok("Porfile","profile",companyProfileResponse);
+    }
+
+    public Object checkRoleCompany() throws BaseException {
+        Company companyByIdToken = tokenService.getCompanyByIdToken();
+        Optional<Company> byId = companyService.findById(companyByIdToken.getId());
+        Company company = byId.get();
+
+        return new Response().ok("Porfile","profile",company.getRole());
     }
 
 }
