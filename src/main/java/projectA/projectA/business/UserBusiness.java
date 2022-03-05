@@ -1,5 +1,9 @@
 package projectA.projectA.business;
 
+import org.apache.catalina.security.SecurityUtil;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import projectA.projectA.entity.User;
 import projectA.projectA.exception.BaseException;
@@ -47,9 +51,10 @@ public class UserBusiness {
         if (!userService.matchPassword(request.getPassWord(), user.getPassWord())) {
             throw UserException.loginFailPasswordIncorrect();
         }
-        String tokenize = tokenService.tokenize(user);
+        String token = tokenService.tokenize(user);
+        String refreshToken = tokenService.tokenizeRefresh(user);
 //    System.out.printf(tokenize);
-        return new Response().okLogin("Login success", "token", tokenize,"role",user.getRole());
+        return new Response().okLogin("Login success", "token", token,"refreshToken",refreshToken,"role",user.getRole());
     }
 
     public Object LoginAdmin(UserLoginReq request) throws BaseException {
@@ -201,6 +206,25 @@ public class UserBusiness {
         UserProfileResponse userProfileResponse = userMapper.UserProfileToResponse(user);
 
         return new Response().ok("Profile", "data", userProfileResponse);
+    }
+
+    public Object refreshToken() throws BaseException{
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String Id = (String) authentication.getPrincipal();
+
+        int userId = Integer.parseInt(Id);
+
+        Optional<User> opt = userService.findById(userId);
+        if (opt.isEmpty()) {
+            throw UserException.notFoundId();
+        }
+        User user = opt.get();
+
+        String token = tokenService.tokenize(user);
+        String refreshToken = tokenService.tokenizeRefresh(user);
+
+        return new Response().okLogin("Refresh Success", "token", token,"refreshToken",refreshToken,"role",user.getRole());
     }
 
     public Object checkRoleUser() throws BaseException {

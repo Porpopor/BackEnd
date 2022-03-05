@@ -141,16 +141,16 @@ public class CompanyWorkBusiness {
         return new Response().success("แก้ไขสำเร็จ");
     }
 
-    public Object editFindById() throws BaseException {
+    public Object listFindByIdCompany() throws BaseException {
 
         Company companyByIdToken = tokenService.getCompanyByIdToken();
 
         System.out.println(companyByIdToken.getId());
 
         List<CompanyWork> companyWorks = companyWorkService.FindByIdCompany(companyByIdToken.getId());
-        List<CompanyWorkResponse> companyWorkResponse= companyWorkMapper.toListCompanyWorkResponse(companyWorks);
+        List<CompanyWorkResponse> companyWorkResponse = companyWorkMapper.toListCompanyWorkResponse(companyWorks);
 
-        return new Response().ok("company work","list",companyWorkResponse);
+        return new Response().ok("company work", "list", companyWorkResponse);
 
     }
 
@@ -162,6 +162,44 @@ public class CompanyWorkBusiness {
         CompanyWork comp = byId.get();
         CompanyWorkResponse companyWorkResponse = companyWorkMapper.toCompanyWorkResponse(comp);
         return new Response().ok("CompById", "data", companyWorkResponse);
+    }
+
+    public Object findByIdCompanyView(Integer id) throws BaseException {
+        Company companyByIdToken = tokenService.getCompanyByIdToken();
+        Optional<CompanyWork> byId = companyWorkRepository.findById(id);
+        if (byId.isEmpty()) {
+            throw CompanyWorkException.notFoundId();
+        }
+        CompanyWork comp = byId.get();
+        if(companyByIdToken.getId() != comp.getCompany().getId()){
+            throw CompanyWorkException.notFoundId();
+        }
+        CompanyWorkResponse companyWorkResponse = companyWorkMapper.toCompanyWorkResponse(comp);
+        return new Response().ok("CompById", "data", companyWorkResponse);
+    }
+
+    public Object editFindByIdView(CompanyWorkReq request) throws BaseException {
+        Company companyByIdToken = tokenService.getCompanyByIdToken();
+
+        Optional<CompanyWork> byId = companyWorkRepository.findById(request.getId());
+        if (byId.isEmpty()) {
+            throw CompanyWorkException.notFoundId();
+        }
+        CompanyWork companyWork = byId.get();
+
+        companyWorkService.editCompanyWork(
+                companyWork,
+                request.getCompanyName(),
+                request.getProvince(),
+                request.getDistrict(),
+                request.getJobTitle(),
+                request.getSalary(),
+                request.getWelfareBenefits(),
+                request.getDetailWork(),
+                request.getFeature(),
+                request.getContact()
+                );
+        return new Response().success("แก้ไขสำเร็จ");
     }
 
     public Object listAll() throws BaseException {

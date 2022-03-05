@@ -6,7 +6,6 @@ import projectA.projectA.business.CompanyWorkBusiness;
 import projectA.projectA.business.UserBusiness;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.exception.CompanyWorkException;
-import projectA.projectA.model.companyWorkModel.CompanyWorkDelete;
 import projectA.projectA.model.companyWorkModel.CompanyWorkReq;
 
 @RestController
@@ -28,7 +27,7 @@ public class CompanyWorkController {
 
     }
 
-    @PostMapping("/edit/{id}")
+    @PutMapping("/edit/{id}")
     public ResponseEntity<Object> editComp(@PathVariable Integer id, @RequestBody CompanyWorkReq request) throws BaseException {
         Object response = companyWorkBusiness.editCompanyWork(id,request);
         return ResponseEntity.ok(response);
@@ -54,7 +53,13 @@ public class CompanyWorkController {
 
     @GetMapping("/list-byCompany")
     public ResponseEntity<Object> listByCompany() throws BaseException {
-        Object response = companyWorkBusiness.editFindById();
+        Object response = companyWorkBusiness.listFindByIdCompany();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/view-byCompany/{id}")
+    public ResponseEntity<Object> viewCompany(@PathVariable Integer id) throws BaseException {
+        Object response = companyWorkBusiness.findByIdCompanyView(id);
         return ResponseEntity.ok(response);
     }
 }

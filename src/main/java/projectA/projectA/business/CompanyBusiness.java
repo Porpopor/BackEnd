@@ -43,8 +43,9 @@ public class CompanyBusiness {
         }
 
         String token = tokenService.tokenizeCompany(company);
+        String refreshToken = tokenService.tokenizeRefreshCompany(company);
 
-        return new Response().okLogin("Login Success", "token", token,"role",company.getRole());
+        return new Response().okLogin("Login Success", "token", token,"refreshToken",refreshToken,"role",company.getRole());
 
     }
 

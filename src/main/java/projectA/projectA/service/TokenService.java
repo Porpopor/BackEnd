@@ -39,7 +39,7 @@ public class TokenService {
 
   public String tokenize(User user) {
     Calendar calendar = Calendar.getInstance();
-    calendar.add(Calendar.MINUTE, 60);
+    calendar.add(Calendar.HOUR, 24);
     Date expiresAt = calendar.getTime();
 
     return JWT.create()
@@ -50,9 +50,34 @@ public class TokenService {
       .sign(algorithm());
   }
 
+  public String tokenizeRefresh(User user) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.DAY_OF_WEEK, 7);
+    Date expiresAt = calendar.getTime();
+
+    return JWT.create()
+            .withIssuer(issuer)
+            .withClaim("principal", user.getId().toString())
+            .withClaim("role", user.getRole().toString())
+            .withExpiresAt(expiresAt)
+            .sign(algorithm());
+  }
+
   public String tokenizeCompany(Company company) {
     Calendar calendar = Calendar.getInstance();
-    calendar.add(Calendar.MINUTE, 60);
+    calendar.add(Calendar.HOUR, 24);
+    Date expiresAt = calendar.getTime();
+
+    return JWT.create()
+            .withIssuer(issuer)
+            .withClaim("principal", company.getId().toString())
+            .withClaim("role", "company")
+            .withExpiresAt(expiresAt)
+            .sign(algorithm());
+  }
+  public String tokenizeRefreshCompany(Company company) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.DAY_OF_WEEK, 7);
     Date expiresAt = calendar.getTime();
 
     return JWT.create()

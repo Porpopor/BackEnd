@@ -94,6 +94,12 @@ public class UserController {
     return ResponseEntity.ok(response);
   }
 
+  @GetMapping("/refresh-token")
+  public ResponseEntity<Object> refreshToken() throws BaseException {
+    Object response = userBusiness.refreshToken();
+    return ResponseEntity.ok(response);
+  }
+
   @GetMapping("/test-user")
   public Object getAllUser(){
     APIResponse apiResponse  = new APIResponse();
