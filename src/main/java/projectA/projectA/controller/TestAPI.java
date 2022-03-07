@@ -19,33 +19,33 @@ import java.util.Optional;
 @RequestMapping("/test")
 public class TestAPI {
 
-//    private final Choice_apple_workRepository choice_apple_workRepository;
-//    private final GuestProfileRepository guestProfileRepository;
-//    private final UserRepository userRepository;
-//    private final CompanyWorkRepository companyWorkRepository;
+    private final Choice_apple_workRepository choice_apple_workRepository;
+    private final GuestProfileRepository guestProfileRepository;
+    private final UserRepository userRepository;
+    private final CompanyWorkRepository companyWorkRepository;
+
+    public TestAPI(Choice_apple_workRepository choice_apple_workRepository, GuestProfileRepository guestProfileRepository, UserRepository userRepository, CompanyWorkRepository companyWorkRepository) {
+        this.choice_apple_workRepository = choice_apple_workRepository;
+        this.guestProfileRepository = guestProfileRepository;
+        this.userRepository = userRepository;
+        this.companyWorkRepository = companyWorkRepository;
+    }
 //
-//    public TestAPI(Choice_apple_workRepository choice_apple_workRepository, GuestProfileRepository guestProfileRepository, UserRepository userRepository, CompanyWorkRepository companyWorkRepository) {
-//        this.choice_apple_workRepository = choice_apple_workRepository;
-//        this.guestProfileRepository = guestProfileRepository;
-//        this.userRepository = userRepository;
-//        this.companyWorkRepository = companyWorkRepository;
-//    }
 //
-//
-//    @GetMapping("/user")
-//    public Object user() {
-//        Optional<CompanyWork> byId = companyWorkRepository.findById(userTest.com_id);
-//        CompanyWork companyWork = byId.get();
-//        Optional<User> byId1 = userRepository.findById(userTest.user_id);
-//        User user = byId1.get();
-//        Choice_apply_work choice_apply_work = new Choice_apply_work();
-//
-//        choice_apply_work.setUser(user);
-//        choice_apply_work.setCompanyWork(companyWork);
-//        choice_apply_work.setType(Choice_apply_work.Type.USER);
-//        choice_apple_workRepository.save(choice_apply_work);
-//return "";
-//    }
+    @GetMapping("/user")
+    public Object user() {
+        Optional<CompanyWork> byId = companyWorkRepository.findById(userTest.com_id);
+        CompanyWork companyWork = byId.get();
+        Optional<User> byId1 = userRepository.findById(userTest.user_id);
+        User user = byId1.get();
+        Choice_apply_work choice_apply_work = new Choice_apply_work();
+
+        choice_apply_work.setUser(user);
+        choice_apply_work.setCompanyWork(companyWork);
+        choice_apply_work.setType(Choice_apply_work.Type.USER);
+        choice_apple_workRepository.save(choice_apply_work);
+return "";
+    }
 //
 //    @GetMapping("/guest2")
 //    public Object guest2() {
@@ -74,11 +74,11 @@ public class TestAPI {
 //        return "";
 //    }
 //
-//    interface userTest{
-//        Integer com_id = 2;
-//        Integer user_id=1;
-//
-//
-//    }
+    interface userTest{
+        Integer com_id = 25;
+        Integer user_id=21;
+
+
+    }
 
 }

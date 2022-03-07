@@ -145,7 +145,7 @@ public class CompanyWorkBusiness {
 
         Company companyByIdToken = tokenService.getCompanyByIdToken();
 
-        System.out.println(companyByIdToken.getId());
+//        System.out.println(companyByIdToken.getId());
 
         List<CompanyWork> companyWorks = companyWorkService.FindByIdCompany(companyByIdToken.getId());
         List<CompanyWorkResponse> companyWorkResponse = companyWorkMapper.toListCompanyWorkResponse(companyWorks);
