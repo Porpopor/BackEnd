@@ -108,10 +108,10 @@ public class UserBusiness {
         if (request.getLastName().isBlank()) {
             throw UserException.LastNameNull();
         }
-        if (request.getPhone().isEmpty()) {
+        if (request.getPhone().isBlank()) {
             throw UserException.phoneNull();
         }
-        if (request.getSex().isEmpty()) {
+        if (request.getSex().isBlank()) {
             throw UserException.sexNull();
         }
 
