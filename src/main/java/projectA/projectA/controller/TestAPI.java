@@ -1,17 +1,11 @@
 package projectA.projectA.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import projectA.projectA.entity.Choice_apply_work;
 import projectA.projectA.entity.CompanyWork;
-import projectA.projectA.entity.GuestProfile;
+import projectA.projectA.entity.TestEntity;
 import projectA.projectA.entity.User;
-import projectA.projectA.repository.Choice_apple_workRepository;
-import projectA.projectA.repository.CompanyWorkRepository;
-import projectA.projectA.repository.GuestProfileRepository;
-import projectA.projectA.repository.UserRepository;
+import projectA.projectA.repository.*;
 
 import java.util.Optional;
 
@@ -23,12 +17,14 @@ public class TestAPI {
     private final GuestProfileRepository guestProfileRepository;
     private final UserRepository userRepository;
     private final CompanyWorkRepository companyWorkRepository;
+    private final TestEntityRepo testEntityRepo;
 
-    public TestAPI(Choice_apple_workRepository choice_apple_workRepository, GuestProfileRepository guestProfileRepository, UserRepository userRepository, CompanyWorkRepository companyWorkRepository) {
+    public TestAPI(Choice_apple_workRepository choice_apple_workRepository, GuestProfileRepository guestProfileRepository, UserRepository userRepository, CompanyWorkRepository companyWorkRepository, TestEntityRepo testEntityRepo) {
         this.choice_apple_workRepository = choice_apple_workRepository;
         this.guestProfileRepository = guestProfileRepository;
         this.userRepository = userRepository;
         this.companyWorkRepository = companyWorkRepository;
+        this.testEntityRepo = testEntityRepo;
     }
 //
 //
@@ -74,11 +70,26 @@ return "";
 //        return "";
 //    }
 //
+
+    @PostMapping("/add")
+    public Object add(@RequestBody Object request){
+        TestEntity test = new TestEntity();
+        test.setTest(request.toString());
+        testEntityRepo.save(test);
+        return test;
+    }
+
+
     interface userTest{
         Integer com_id = 25;
         Integer user_id=21;
 
 
     }
+
+    interface test{
+
+    }
+
 
 }

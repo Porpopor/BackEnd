@@ -28,7 +28,7 @@ public class CompanyWorkService {
                                          String salary,
                                          String welfareBenefits,
                                          String detailWork,
-                                         String feature,
+                                         Object feature,
                                          String contact) {
 
         CompanyWork entity = new CompanyWork();
@@ -41,7 +41,7 @@ public class CompanyWorkService {
         entity.setSalary(salary);
         entity.setWelfareBenefits(welfareBenefits);
         entity.setDetailWork(detailWork);
-        entity.setFeature(feature);
+        entity.setFeature(feature.toString());
         entity.setContact(contact);
         entity.setDate(new Date());
         entity.setUpdateDate(new Date());
@@ -59,7 +59,7 @@ public class CompanyWorkService {
             String salary,
             String welfareBenefits,
             String detailWork,
-            String feature,
+            Object feature,
             String contact) {
 
         companyWork.setCompanyName(companyName);
@@ -69,7 +69,7 @@ public class CompanyWorkService {
         companyWork.setSalary(salary);
         companyWork.setWelfareBenefits(welfareBenefits);
         companyWork.setDetailWork(detailWork);
-        companyWork.setFeature(feature);
+        companyWork.setFeature(feature.toString());
         companyWork.setContact(contact);
         companyWork.setUpdateDate(new Date());
         companyWorkRepository.save(companyWork);
@@ -85,9 +85,8 @@ public class CompanyWorkService {
         return byProvince;
     }
 
-    public CompanyWork findById(Integer id) throws CompanyWorkException {
-        Optional<CompanyWork> byId = companyWorkRepository.findById(id);
-        return byId.get();
+    public Optional<CompanyWork> findById(Integer id) throws CompanyWorkException {
+      return   companyWorkRepository.findById(id);
     }
 
     public void deleteById(Integer id) {

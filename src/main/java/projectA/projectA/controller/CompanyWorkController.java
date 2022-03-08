@@ -6,6 +6,7 @@ import projectA.projectA.business.CompanyWorkBusiness;
 import projectA.projectA.business.UserBusiness;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.exception.CompanyWorkException;
+import projectA.projectA.model.companyWorkModel.CompanyWorkDelete;
 import projectA.projectA.model.companyWorkModel.CompanyWorkReq;
 
 @RestController
@@ -60,6 +61,12 @@ public class CompanyWorkController {
     @GetMapping("/view-byCompany/{id}")
     public ResponseEntity<Object> viewCompany(@PathVariable Integer id) throws BaseException {
         Object response = companyWorkBusiness.findByIdCompanyView(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/deleteByCompany")
+    public ResponseEntity<Object> deleteByCompany(@RequestBody CompanyWorkDelete request) throws BaseException {
+        Object response = companyWorkBusiness.deleteByCompany(request);
         return ResponseEntity.ok(response);
     }
 }

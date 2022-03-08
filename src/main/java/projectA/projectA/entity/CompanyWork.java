@@ -39,6 +39,7 @@ public class CompanyWork {
   private String detailWork;
 
   @Column(name = "feature", nullable = true) // คุณสมบัติ
+  @Lob
   private String feature;
 
   @Column(name = "contact", nullable = false) // ติดต่อที่

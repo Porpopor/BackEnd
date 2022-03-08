@@ -1,9 +1,14 @@
 package projectA.projectA.business;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import projectA.projectA.entity.Company;
+import projectA.projectA.entity.User;
 import projectA.projectA.exception.BaseException;
 import projectA.projectA.exception.CompanyException;
+import projectA.projectA.exception.UserException;
 import projectA.projectA.mapper.CompanyMapper;
 import projectA.projectA.model.Response;
 import projectA.projectA.model.UploadFileReq;
@@ -70,6 +75,24 @@ public class CompanyBusiness {
         }
         companyService.register(request.getEmail(), request.getCompanyName(), request.getPassWord(), request.getPhone(), request.getType());
         return new Response().success("Register Success");
+    }
+    public Object refreshToken() throws BaseException{
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        String Id = (String) authentication.getPrincipal();
+
+        int userId = Integer.parseInt(Id);
+
+        Optional<Company> opt = companyService.findById(userId);
+        if (opt.isEmpty()) {
+            throw UserException.notFoundId();
+        }
+        Company company = opt.get();
+
+        String token = tokenService.tokenizeCompany(company);
+        String refreshToken = tokenService.tokenizeRefreshCompany(company);
+
+        return new Response().okLogin("Refresh Success", "token", token,"refreshToken",refreshToken,"role",company.getRole());
     }
 
     public Object editCompanyProfile(CompanyEditReq request) throws BaseException {

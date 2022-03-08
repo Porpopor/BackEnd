@@ -15,6 +15,6 @@ public class CompanyWorkReq {
   private String salary;
   private String welfareBenefits;
   private String detailWork;
-  private String feature;
+  private Object feature;
   private String contact;
 }

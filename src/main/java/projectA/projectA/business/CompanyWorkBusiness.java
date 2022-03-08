@@ -61,7 +61,7 @@ public class CompanyWorkBusiness {
         if (request.getDetailWork().isBlank()) {
             throw CompanyWorkException.detailWorkNull();
         }
-        if (request.getFeature().isBlank()) {
+        if (request.getFeature().toString().isBlank()) {
             throw CompanyWorkException.featureNull();
         }
         if (request.getContact().isBlank()) {
@@ -119,7 +119,7 @@ public class CompanyWorkBusiness {
         if (request.getDetailWork().isBlank()) {
             throw CompanyWorkException.detailWorkNull();
         }
-        if (request.getFeature().isBlank()) {
+        if (request.getFeature().toString().isBlank()) {
             throw CompanyWorkException.featureNull();
         }
         if (request.getContact().isBlank()) {
@@ -218,6 +218,20 @@ public class CompanyWorkBusiness {
         List<CompanyWorkResponse> comp = companyWorkMapper.toListCompanyWorkResponse(province);
 
         return new Response().ok("Success", "companyWork", comp);
+    }
+
+    public Object deleteByCompany(CompanyWorkDelete request) throws BaseException {
+        Company companyByIdToken = tokenService.getCompanyByIdToken();
+        Optional<CompanyWork> byId = companyWorkService.findById(request.getId());
+        if (byId.isEmpty()){
+            throw CompanyWorkException.notFoundId();
+        }
+        CompanyWork companyWork = byId.get();
+        if (companyWork.getCompany().getId() != companyByIdToken.getId()){
+            throw CompanyWorkException.notFoundId();
+        }
+        companyWorkService.deleteById(request.getId());
+        return new Response().success("Deleted");
     }
 
     public Object deleteByAdmin(CompanyWorkDelete request) throws BaseException {

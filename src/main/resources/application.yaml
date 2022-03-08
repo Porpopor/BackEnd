@@ -14,7 +14,7 @@ Spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/backend
     username: root
-    password:
+    password: backend
   mail:
     default-encoding: UTF-8
     host: smtp.gmail.com
