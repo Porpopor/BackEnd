@@ -64,9 +64,9 @@ public class CompanyWorkController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/deleteByCompany")
-    public ResponseEntity<Object> deleteByCompany(@RequestBody CompanyWorkDelete request) throws BaseException {
-        Object response = companyWorkBusiness.deleteByCompany(request);
+    @DeleteMapping("/deleteByCompany/{id}")
+    public ResponseEntity<Object> deleteByCompany(@PathVariable Integer id) throws BaseException {
+        Object response = companyWorkBusiness.deleteByCompany(id);
         return ResponseEntity.ok(response);
     }
 }

@@ -85,4 +85,10 @@ public class CompanyController {
         Object response = companyBusiness.checkRoleCompany();
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/refresh-token")
+    public ResponseEntity<Object>refreshToken() throws BaseException {
+        Object response = companyBusiness.refreshToken();
+        return ResponseEntity.ok(response);
+    }
 }

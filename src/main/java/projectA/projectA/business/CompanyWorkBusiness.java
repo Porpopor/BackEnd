@@ -220,9 +220,9 @@ public class CompanyWorkBusiness {
         return new Response().ok("Success", "companyWork", comp);
     }
 
-    public Object deleteByCompany(CompanyWorkDelete request) throws BaseException {
+    public Object deleteByCompany(Integer id) throws BaseException {
         Company companyByIdToken = tokenService.getCompanyByIdToken();
-        Optional<CompanyWork> byId = companyWorkService.findById(request.getId());
+        Optional<CompanyWork> byId = companyWorkService.findById(id);
         if (byId.isEmpty()){
             throw CompanyWorkException.notFoundId();
         }
@@ -230,7 +230,7 @@ public class CompanyWorkBusiness {
         if (companyWork.getCompany().getId() != companyByIdToken.getId()){
             throw CompanyWorkException.notFoundId();
         }
-        companyWorkService.deleteById(request.getId());
+        companyWorkService.deleteById(id);
         return new Response().success("Deleted");
     }
 
