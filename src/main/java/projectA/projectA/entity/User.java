@@ -43,7 +43,7 @@ public class User extends AutoID {
     private Role role = Role.USER;
 
     @Column(name = "picture", nullable = true)
-    private String picture;
+    private String picture = "2022-03-10_01-30-34.png";
 
     @Column(name = "new_email",nullable = true)
     private String newEmail;

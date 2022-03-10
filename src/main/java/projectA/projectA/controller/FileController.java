@@ -1,14 +1,19 @@
 package projectA.projectA.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import projectA.projectA.business.FileBusiness;
 import projectA.projectA.entity.Company;
+import projectA.projectA.entity.CompanyWork;
 import projectA.projectA.entity.User;
 import projectA.projectA.exception.UserException;
 import projectA.projectA.model.Response;
 import projectA.projectA.model.companyModel.CompanyUploadProFile;
 import projectA.projectA.model.UploadFileReq;
 import projectA.projectA.repository.CompanyRepository;
+import projectA.projectA.repository.CompanyWorkRepository;
 import projectA.projectA.repository.UserRepository;
 import projectA.projectA.service.TokenService;
 
@@ -16,8 +21,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @RequestMapping("/file")
@@ -26,11 +31,15 @@ public class FileController {
     public final UserRepository userRepository;
     public final TokenService tokenService;
     public final CompanyRepository companyRepository;
+    public final CompanyWorkRepository companyWorkRepository;
+    public final FileBusiness fileBusiness;
 
-    public FileController(UserRepository userRepository, TokenService tokenService, CompanyRepository companyRepository) {
+    public FileController(UserRepository userRepository, TokenService tokenService, CompanyRepository companyRepository, CompanyWorkRepository companyWorkRepository, FileBusiness fileBusiness) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
         this.companyRepository = companyRepository;
+        this.companyWorkRepository = companyWorkRepository;
+        this.fileBusiness = fileBusiness;
     }
 
     @PostMapping("/image/user-profile")
@@ -133,4 +142,47 @@ public class FileController {
         return new Response().ok("upload success", "img", img);
 
     }
+
+    @PostMapping("/test/{id}")
+    public ResponseEntity<Void> upload(@PathVariable Integer id, @RequestParam("files") MultipartFile[] files) {
+        ArrayList<String> picture = new ArrayList<>();
+        try {
+            System.out.println("File List");
+            for (MultipartFile file : files) {
+                System.out.println(file.getOriginalFilename());
+                save(id,file);
+                picture.add(save(id,file));
+            }
+            System.out.println(picture);
+            Optional<CompanyWork> byId = companyWorkRepository.findById(id);
+            CompanyWork companyWork = byId.get();
+            companyWork.setPicture(picture.toString());
+            companyWorkRepository.save(companyWork);
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private String save(Integer id,MultipartFile file) {
+        String dir = new CompanyUploadProFile().getDir();
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyyHHmmss");
+            String newFileName = simpleDateFormat.format(new Date()) + file.getOriginalFilename();
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(uploadDirectory + dir, newFileName);
+            Files.write(path, bytes);
+            return newFileName;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    @GetMapping("/testfile/{id}")
+    public ResponseEntity<Object> imageCompanyWork(@PathVariable Integer id){
+        Object response = fileBusiness.imageCompanyWork(id);
+        return ResponseEntity.ok(response);
+    }
+
+
 }

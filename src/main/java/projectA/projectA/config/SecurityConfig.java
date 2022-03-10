@@ -35,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/company/companyForget-password",
             "/company-work/view-byid/**",
             "/test/**",
-            "/company/register"
+            "/company/register",
+            "/file/**"
     };
 
     public SecurityConfig(TokenService tokenService) {

@@ -51,6 +51,9 @@ public class CompanyWork {
   @Column(name = "update_date", nullable = false)
   private Date updateDate = new Date();
 
+  @Column(name = "picture")
+  private String picture;
+
   @ManyToOne
   @JoinColumn(name = "company_id",nullable = false) //company id
   private Company company;
