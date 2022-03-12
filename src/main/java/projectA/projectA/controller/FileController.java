@@ -143,7 +143,7 @@ public class FileController {
 
     }
 
-    @PostMapping("/test/{id}")
+    @PostMapping("/company-work/{id}")
     public ResponseEntity<Void> upload(@PathVariable Integer id, @RequestParam("files") MultipartFile[] files) {
         ArrayList<String> picture = new ArrayList<>();
         try {

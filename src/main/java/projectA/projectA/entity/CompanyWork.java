@@ -52,7 +52,7 @@ public class CompanyWork {
   private Date updateDate = new Date();
 
   @Column(name = "picture")
-  private String picture;
+  private String picture = "[12032022123446user.png]";
 
   @ManyToOne
   @JoinColumn(name = "company_id",nullable = false) //company id

@@ -8,6 +8,7 @@ import projectA.projectA.exception.BaseException;
 import projectA.projectA.exception.CompanyWorkException;
 import projectA.projectA.mapper.CompanyWorkMapper;
 import projectA.projectA.model.Response;
+import projectA.projectA.model.UploadFileReq;
 import projectA.projectA.model.companyWorkModel.CompanyWorkDelete;
 import projectA.projectA.model.companyWorkModel.CompanyWorkReq;
 import projectA.projectA.model.companyWorkModel.CompanyWorkResponse;
@@ -15,12 +16,13 @@ import projectA.projectA.repository.CompanyWorkRepository;
 import projectA.projectA.service.CompanyWorkService;
 import projectA.projectA.service.TokenService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CompanyWorkBusiness {
-
+    UploadFileReq url = new UploadFileReq();
     private final TokenService tokenService;
     private final CompanyWorkService companyWorkService;
     private final CompanyWorkMapper companyWorkMapper;
@@ -174,6 +176,15 @@ public class CompanyWorkBusiness {
         if(companyByIdToken.getId() != comp.getCompany().getId()){
             throw CompanyWorkException.notFoundId();
         }
+        String substring = comp.getPicture().substring(1, comp.getPicture().length() - 1);
+        String[] split = substring.split(", ");
+        ArrayList<String> picture = new ArrayList<>();
+        for (int i = 0; i < split.length; i++){
+            picture.add(url.getHost() + url.getDirCompanyProfile() + split[i]);
+        }
+        String image = picture.toString().substring(1, picture.toString().length() - 1);
+        String[] split1 = image.split(", ");
+        comp.setPicture(image);
         CompanyWorkResponse companyWorkResponse = companyWorkMapper.toCompanyWorkResponse(comp);
         return new Response().ok("CompById", "data", companyWorkResponse);
     }

@@ -17,4 +17,5 @@ public class CompanyWorkResponse {
   private String detailWork;
   private String feature;
   private String contact;
+  private String picture;
 }
