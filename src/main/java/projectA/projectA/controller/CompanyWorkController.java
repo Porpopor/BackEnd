@@ -46,9 +46,9 @@ public class CompanyWorkController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/view-byid")
-    public ResponseEntity<Object> findById(@RequestBody CompanyWorkReq req) throws CompanyWorkException {
-        Object response = companyWorkBusiness.findById(req);
+    @GetMapping ("/view-byid/{id}")
+    public ResponseEntity<Object> findById(@PathVariable Integer id) throws CompanyWorkException {
+        Object response = companyWorkBusiness.findById(id);
         return ResponseEntity.ok(response);
     }
 

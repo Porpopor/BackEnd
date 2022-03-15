@@ -57,7 +57,7 @@ public class CompanyWorkBusiness {
         if (request.getSalary().isBlank()) {
             throw CompanyWorkException.salaryNull();
         }
-        if (request.getWelfareBenefits().isBlank()) {
+        if (request.getWelfareBenefits().toString().isBlank()) {
             throw CompanyWorkException.welfareBenefitsNull();
         }
         if (request.getDetailWork().isBlank()) {
@@ -70,7 +70,7 @@ public class CompanyWorkBusiness {
             throw CompanyWorkException.contactNull();
         }
 
-        companyWorkService.createCompanyWork(company,
+        CompanyWork companyWork = companyWorkService.createCompanyWork(company,
                 request.getCompanyName(),
                 request.getProvince(),
                 request.getDistrict(),
@@ -80,7 +80,7 @@ public class CompanyWorkBusiness {
                 request.getDetailWork(),
                 request.getFeature(),
                 request.getContact());
-        return new Response().success("Create Success");
+        return new Response().ok("profile","id",companyWork.getId());
     }
 
     public Object editCompanyWork(Integer id, CompanyWorkReq request) throws BaseException {
@@ -115,7 +115,7 @@ public class CompanyWorkBusiness {
         if (request.getSalary().isBlank()) {
             throw CompanyWorkException.salaryNull();
         }
-        if (request.getWelfareBenefits().isBlank()) {
+        if (request.getWelfareBenefits().toString().isBlank()) {
             throw CompanyWorkException.welfareBenefitsNull();
         }
         if (request.getDetailWork().isBlank()) {
@@ -156,8 +156,8 @@ public class CompanyWorkBusiness {
 
     }
 
-    public Object findById(CompanyWorkReq id) throws CompanyWorkException {
-        Optional<CompanyWork> byId = companyWorkRepository.findById(id.getId());
+    public Object findById(Integer id) throws CompanyWorkException {
+        Optional<CompanyWork> byId = companyWorkRepository.findById(id);
         if (byId.isEmpty()) {
             throw CompanyWorkException.notFoundId();
         }
@@ -180,7 +180,9 @@ public class CompanyWorkBusiness {
         String[] split = substring.split(", ");
         ArrayList<String> picture = new ArrayList<>();
         for (int i = 0; i < split.length; i++){
-            picture.add(url.getHost() + url.getDirCompanyProfile() + split[i]);
+            picture.add(
+//                    url.getHost() + url.getDirCompanyProfile() +
+                    split[i]);
         }
         String image = picture.toString().substring(1, picture.toString().length() - 1);
         String[] split1 = image.split(", ");

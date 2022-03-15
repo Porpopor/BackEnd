@@ -13,7 +13,7 @@ public class CompanyWorkReq {
   private String district;
   private String jobTitle;
   private String salary;
-  private String welfareBenefits;
+  private Object welfareBenefits;
   private String detailWork;
   private Object feature;
   private String contact;

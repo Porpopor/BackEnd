@@ -26,7 +26,7 @@ public class CompanyWorkService {
                                          String district,
                                          String jobTitle,
                                          String salary,
-                                         String welfareBenefits,
+                                         Object welfareBenefits,
                                          String detailWork,
                                          Object feature,
                                          String contact) {
@@ -39,7 +39,7 @@ public class CompanyWorkService {
         entity.setDistrict(district);
         entity.setJobTitle(jobTitle);
         entity.setSalary(salary);
-        entity.setWelfareBenefits(welfareBenefits);
+        entity.setWelfareBenefits(welfareBenefits.toString());
         entity.setDetailWork(detailWork);
         entity.setFeature(feature.toString());
         entity.setContact(contact);
@@ -57,7 +57,7 @@ public class CompanyWorkService {
             String district,
             String jobTitle,
             String salary,
-            String welfareBenefits,
+            Object welfareBenefits,
             String detailWork,
             Object feature,
             String contact) {
@@ -67,7 +67,7 @@ public class CompanyWorkService {
         companyWork.setDistrict(district);
         companyWork.setJobTitle(jobTitle);
         companyWork.setSalary(salary);
-        companyWork.setWelfareBenefits(welfareBenefits);
+        companyWork.setWelfareBenefits(welfareBenefits.toString());
         companyWork.setDetailWork(detailWork);
         companyWork.setFeature(feature.toString());
         companyWork.setContact(contact);
