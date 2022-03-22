@@ -59,7 +59,7 @@ public class FileController {
 
         //validate size
         if (file.getSize() > 1048576 * 5) {
-            //throw error
+//            throw error
             throw UserException.loginFailEmailNotFound();
         }
         String contentType = file.getContentType();
